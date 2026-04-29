@@ -1,0 +1,66 @@
+<?php
+/**
+ * Activation tasks.
+ *
+ * @package MailIntelix
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+/**
+ * Creates database schema and default settings.
+ */
+class MailIntelix_Activator {
+	/**
+	 * Run plugin activation tasks.
+	 *
+	 * @return void
+	 */
+	public static function activate() {
+		self::create_table();
+
+		if ( false === get_option( MAILINTELIX_SETTINGS_OPTION, false ) ) {
+			add_option(
+				MAILINTELIX_SETTINGS_OPTION,
+				array(
+					'logging_enabled'         => 1,
+					'retention_days'          => 0,
+					'delete_data_on_uninstall' => 0,
+					'max_logs'                => 5000,
+				)
+			);
+		}
+	}
+
+	/**
+	 * Create or update the logs table.
+	 *
+	 * @return void
+	 */
+	public static function create_table() {
+		global $wpdb;
+
+		$table_name      = mailintelix_get_logs_table();
+		$charset_collate = $wpdb->get_charset_collate();
+
+		$sql = "CREATE TABLE {$table_name} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			status varchar(20) NOT NULL DEFAULT 'sent',
+			sent_at datetime NOT NULL,
+			to_email longtext NULL,
+			subject text NULL,
+			message longtext NULL,
+			headers longtext NULL,
+			attachments longtext NULL,
+			error_message longtext NULL,
+			created_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			KEY status (status),
+			KEY sent_at (sent_at),
+			KEY created_at (created_at)
+		) {$charset_collate};";
+
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		dbDelta( $sql );
+	}
+}

@@ -1,0 +1,380 @@
+.mailintelix-wrap {
+	max-width: none;
+	padding-right: 20px;
+}
+
+.mailintelix-hero {
+	align-items: center;
+	background: linear-gradient(135deg, #172033 0%, #0f766e 100%);
+	border-radius: 8px;
+	box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
+	color: #fff;
+	display: flex;
+	gap: 18px;
+	margin: 22px 0;
+	padding: 26px;
+}
+
+.mailintelix-hero h1 {
+	color: #fff;
+	font-size: 28px;
+	font-weight: 700;
+	line-height: 1.2;
+	margin: 0 0 6px;
+}
+
+.mailintelix-hero p {
+	color: rgba(255, 255, 255, 0.82);
+	font-size: 14px;
+	margin: 0;
+}
+
+.mailintelix-logo {
+	background: rgba(255, 255, 255, 0.14);
+	border: 1px solid rgba(255, 255, 255, 0.24);
+	border-radius: 8px;
+	display: grid;
+	flex: 0 0 64px;
+	height: 64px;
+	place-items: center;
+	width: 64px;
+}
+
+.mailintelix-logo__icon {
+	color: #fff;
+	font-size: 34px;
+	height: 34px;
+	line-height: 34px;
+	width: 34px;
+}
+
+.mailintelix-card {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 8px;
+	box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+	margin-bottom: 20px;
+	padding: 20px;
+}
+
+.mailintelix-filter-bar {
+	align-items: end;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 18px;
+	justify-content: space-between;
+	margin: 0 0 20px;
+	width: 100%;
+}
+
+.mailintelix-filter-group {
+	align-items: end;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 14px 18px;
+}
+
+.mailintelix-filters .subsubsub {
+	float: none;
+	margin: 0;
+	padding: 0 0 7px;
+}
+
+.mailintelix-filter-row {
+	align-items: end;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.mailintelix-filter-row label {
+	display: grid;
+	gap: 5px;
+}
+
+.mailintelix-search-group .search-box {
+	display: flex;
+	gap: 8px;
+	margin: 0;
+}
+
+.mailintelix-search-group input[type="search"] {
+	min-width: 260px;
+}
+
+.mailintelix-badge {
+	border-radius: 999px;
+	display: inline-flex;
+	font-size: 12px;
+	font-weight: 700;
+	line-height: 1;
+	padding: 6px 10px;
+}
+
+.mailintelix-badge--sent {
+	background: #dcfce7;
+	color: #166534;
+}
+
+.mailintelix-badge--failed {
+	background: #fee2e2;
+	color: #991b1b;
+}
+
+.mailintelix-badge--unknown {
+	background: #f1f5f9;
+	color: #475569;
+}
+
+.mailintelix-actions {
+	display: flex;
+	flex-wrap: nowrap;
+	gap: 6px;
+	white-space: nowrap;
+}
+
+.mailintelix-actions .button {
+	min-height: 30px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.mailintelix-card .wp-list-table {
+	table-layout: fixed;
+}
+
+.mailintelix-card .wp-list-table .column-cb {
+	width: 42px;
+}
+
+.mailintelix-card .wp-list-table .column-status {
+	width: 110px;
+}
+
+.mailintelix-card .wp-list-table .column-sent_at {
+	width: 190px;
+}
+
+.mailintelix-card .wp-list-table .column-to_email {
+	width: 230px;
+}
+
+.mailintelix-card .wp-list-table .column-error_message {
+	width: 260px;
+}
+
+.mailintelix-card .wp-list-table .column-actions {
+	width: 255px;
+}
+
+.mailintelix-modal {
+	align-items: center;
+	background: rgba(15, 23, 42, 0.52);
+	display: none;
+	inset: 0;
+	justify-content: center;
+	padding: 12px 24px;
+	position: fixed;
+	z-index: 100000;
+}
+
+.mailintelix-modal.is-open {
+	display: flex;
+}
+
+.mailintelix-modal__panel {
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 24px 70px rgba(15, 23, 42, 0.34);
+	max-height: calc(100vh - 48px);
+	max-width: 1180px;
+	overflow: auto;
+	padding: 24px;
+	position: relative;
+	width: min(1180px, 100%);
+}
+
+.mailintelix-modal__close {
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+	border-radius: 50%;
+	cursor: pointer;
+	font-size: 26px;
+	height: 36px;
+	line-height: 30px;
+	position: absolute;
+	right: 18px;
+	top: 18px;
+	width: 36px;
+}
+
+.mailintelix-preview h2 {
+	margin-right: 48px;
+}
+
+.mailintelix-preview__meta {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px 18px;
+	margin: 12px 0 18px;
+}
+
+.mailintelix-preview__grid {
+	display: grid;
+	gap: 16px;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.mailintelix-preview pre,
+.mailintelix-tab-panel pre {
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+	max-height: 280px;
+	overflow: auto;
+	padding: 12px;
+	white-space: pre-wrap;
+}
+
+.mailintelix-empty-meta {
+	background: #f6f7f7;
+	border: 1px dashed #c3c4c7;
+	border-radius: 6px;
+	color: #646970;
+	padding: 14px;
+}
+
+.mailintelix-error-block {
+	background: #fef2f2;
+	border-left: 4px solid #dc2626;
+	border-radius: 6px;
+	color: #7f1d1d;
+	margin: 14px 0;
+	padding: 12px 14px;
+}
+
+.mailintelix-tabs {
+	border-bottom: 1px solid #dcdcde;
+	display: flex;
+	gap: 6px;
+	margin-top: 20px;
+}
+
+.mailintelix-tabs button {
+	background: transparent;
+	border: 0;
+	border-bottom: 3px solid transparent;
+	cursor: pointer;
+	font-weight: 700;
+	padding: 12px 14px;
+}
+
+.mailintelix-tabs button.is-active {
+	border-bottom-color: #0f766e;
+	color: #0f766e;
+}
+
+.mailintelix-tab-panel {
+	display: none;
+	padding-top: 16px;
+}
+
+.mailintelix-tab-panel.is-active {
+	display: block;
+}
+
+.mailintelix-email-frame {
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+	box-sizing: border-box;
+	height: 58vh;
+	min-height: 420px;
+	width: 100%;
+}
+
+.mailintelix-tab-panel[data-mailintelix-panel="source"] pre {
+	box-sizing: border-box;
+	height: 58vh;
+	max-height: none;
+	min-height: 420px;
+}
+
+.mailintelix-field {
+	display: grid;
+	gap: 8px;
+	margin-bottom: 20px;
+	max-width: 520px;
+}
+
+.mailintelix-field > label:first-child {
+	font-weight: 700;
+}
+
+.mailintelix-tools-grid {
+	display: grid;
+	gap: 18px;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.mailintelix-tools-grid h2 {
+	margin-top: 0;
+}
+
+.mailintelix-tools-grid form {
+	margin-top: 18px;
+}
+
+.mailintelix-tool-field {
+	display: grid;
+	gap: 8px;
+	margin-bottom: 14px;
+}
+
+.mailintelix-tool-field label {
+	font-weight: 600;
+}
+
+.mailintelix-tool-field input {
+	box-sizing: border-box;
+	max-width: 520px;
+	width: 100%;
+}
+
+.mailintelix-danger-card {
+	border-color: #fecaca;
+}
+
+@media screen and (max-width: 782px) {
+	.mailintelix-hero,
+	.mailintelix-filter-bar,
+	.mailintelix-filter-group,
+	.mailintelix-filter-row {
+		align-items: stretch;
+		flex-direction: column;
+	}
+
+	.mailintelix-search-group .search-box {
+		align-items: stretch;
+		flex-direction: column;
+	}
+
+	.mailintelix-search-group input[type="search"] {
+		min-width: 0;
+		width: 100%;
+	}
+
+	.mailintelix-preview__grid,
+	.mailintelix-tools-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.mailintelix-modal {
+		padding: 12px;
+	}
+
+	.mailintelix-email-frame,
+	.mailintelix-tab-panel[data-mailintelix-panel="source"] pre {
+		min-height: 320px;
+	}
+}
