@@ -39,8 +39,6 @@ class MailIntelix_Table extends WP_List_Table {
 		$params       = array();
 		$table_name   = esc_sql( mailintelix_get_logs_table() );
 
-		$this->process_bulk_action();
-
 		$status = mailintelix_get_request_value( 'status' );
 		if ( in_array( $status, array( 'sent', 'failed' ), true ) ) {
 			$where[]  = 'status = %s';

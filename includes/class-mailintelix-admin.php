@@ -17,6 +17,7 @@ class MailIntelix_Admin {
 	 * @return void
 	 */
 	public static function init() {
+		add_action( 'admin_init', array( __CLASS__, 'handle_bulk_log_action' ) );
 		add_action( 'admin_menu', array( __CLASS__, 'register_menu' ) );
 		add_action( 'admin_bar_menu', array( __CLASS__, 'register_admin_bar_link' ), 80 );
 		add_action( 'in_admin_header', array( __CLASS__, 'suppress_admin_notices' ), 0 );
@@ -25,6 +26,66 @@ class MailIntelix_Admin {
 		add_action( 'admin_post_mailintelix_resend_log', array( __CLASS__, 'handle_resend_log' ) );
 		add_action( 'wp_ajax_mailintelix_get_log', array( __CLASS__, 'ajax_get_log' ) );
 		add_action( 'wp_ajax_mailintelix_delete_log', array( __CLASS__, 'ajax_delete_log' ) );
+	}
+
+	/**
+	 * Handle bulk log actions before wp-admin starts rendering.
+	 *
+	 * @return void
+	 */
+	public static function handle_bulk_log_action() {
+		if ( ! is_admin() || 'mailintelix' !== mailintelix_get_request_value( 'page' ) ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized immediately after unslashing.
+		$request_method = isset( $_SERVER['REQUEST_METHOD'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) : '';
+		if ( 'POST' !== strtoupper( $request_method ) ) {
+			return;
+		}
+
+		$bulk_action = self::get_requested_bulk_action();
+		if ( 'delete' !== $bulk_action ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to perform this action.', 'mailintelix' ) );
+		}
+
+		check_admin_referer( 'bulk-mailintelix_logs' );
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified by check_admin_referer() above.
+		$ids           = isset( $_POST['log_ids'] ) ? array_map( 'absint', (array) wp_unslash( $_POST['log_ids'] ) ) : array();
+		$deleted_count = MailIntelix_Logger::delete_logs( $ids );
+
+		wp_safe_redirect(
+			self::logs_url(
+				array(
+					'mailintelix_message'       => 'bulk',
+					'mailintelix_deleted_count' => absint( $deleted_count ),
+				)
+			)
+		);
+		exit;
+	}
+
+	/**
+	 * Read the selected bulk action from the top or bottom list-table controls.
+	 *
+	 * @return string
+	 */
+	private static function get_requested_bulk_action() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified by the caller before action execution.
+		$action = isset( $_POST['action'] ) ? sanitize_key( wp_unslash( $_POST['action'] ) ) : '';
+		if ( $action && '-1' !== $action ) {
+			return $action;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified by the caller before action execution.
+		$action2 = isset( $_POST['action2'] ) ? sanitize_key( wp_unslash( $_POST['action2'] ) ) : '';
+
+		return ( $action2 && '-1' !== $action2 ) ? $action2 : '';
 	}
 
 	/**
@@ -209,6 +270,7 @@ class MailIntelix_Admin {
 				</div>
 			</form>
 			<form method="post" action="<?php echo esc_url( self::logs_url() ); ?>">
+				<input type="hidden" name="page" value="mailintelix" />
 				<?php $table->display(); ?>
 			</form>
 		</div>
