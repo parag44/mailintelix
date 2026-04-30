@@ -15,6 +15,10 @@
 	padding: 26px;
 }
 
+.mailintelix-hero__content {
+	min-width: 0;
+}
+
 .mailintelix-hero h1 {
 	color: #fff;
 	font-size: 28px;

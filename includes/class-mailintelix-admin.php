@@ -297,7 +297,7 @@ class MailIntelix_Admin {
 				<div class="mailintelix-logo" aria-hidden="true">
 					<span class="dashicons dashicons-email mailintelix-logo__icon"></span>
 				</div>
-				<div>
+				<div class="mailintelix-hero__content">
 					<h1><?php echo esc_html( $title ); ?></h1>
 					<p><?php esc_html_e( 'Email logging, debugging, and delivery insights for WordPress.', 'mailintelix' ); ?></p>
 				</div>
