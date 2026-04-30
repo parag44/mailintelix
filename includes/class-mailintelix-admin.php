@@ -207,6 +207,8 @@ class MailIntelix_Admin {
 						<?php $table->search_box( __( 'Search logs', 'mailintelix' ), 'mailintelix-search' ); ?>
 					</div>
 				</div>
+			</form>
+			<form method="post" action="<?php echo esc_url( self::logs_url() ); ?>">
 				<?php $table->display(); ?>
 			</form>
 		</div>
@@ -271,6 +273,17 @@ class MailIntelix_Admin {
 		);
 
 		if ( isset( $messages[ $message ] ) ) {
+			if ( 'bulk' === $message ) {
+				$count = absint( mailintelix_get_request_value( 'mailintelix_deleted_count' ) );
+				if ( $count > 0 ) {
+					$messages[ $message ] = sprintf(
+						/* translators: %d: number of deleted email logs. */
+						_n( '%d email log deleted.', '%d email logs deleted.', $count, 'mailintelix' ),
+						$count
+					);
+				}
+			}
+
 			printf(
 				'<div class="notice notice-success is-dismissible"><p>%s</p></div>',
 				esc_html( $messages[ $message ] )

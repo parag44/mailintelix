@@ -220,10 +220,18 @@ class MailIntelix_Table extends WP_List_Table {
 
 		check_admin_referer( 'bulk-' . $this->_args['plural'] );
 
-		$ids = isset( $_REQUEST['log_ids'] ) ? array_map( 'absint', (array) wp_unslash( $_REQUEST['log_ids'] ) ) : array();
-		MailIntelix_Logger::delete_logs( $ids );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce is verified by check_admin_referer() above.
+		$ids           = isset( $_REQUEST['log_ids'] ) ? array_map( 'absint', (array) wp_unslash( $_REQUEST['log_ids'] ) ) : array();
+		$deleted_count = MailIntelix_Logger::delete_logs( $ids );
 
-		wp_safe_redirect( MailIntelix_Admin::logs_url( array( 'mailintelix_message' => 'bulk' ) ) );
+		wp_safe_redirect(
+			MailIntelix_Admin::logs_url(
+				array(
+					'mailintelix_message'       => 'bulk',
+					'mailintelix_deleted_count' => absint( $deleted_count ),
+				)
+			)
+		);
 		exit;
 	}
 
