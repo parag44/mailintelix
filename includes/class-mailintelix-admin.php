@@ -348,7 +348,7 @@ class MailIntelix_Admin {
 
 			echo '<div class="mailintelix-notices">';
 			printf(
-				'<div class="notice notice-success is-dismissible"><p>%s</p></div>',
+				'<div class="mailintelix-notice mailintelix-notice--success" role="status"><p>%s</p></div>',
 				esc_html( $messages[ $message ] )
 			);
 			echo '</div>';
