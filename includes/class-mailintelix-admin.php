@@ -346,10 +346,12 @@ class MailIntelix_Admin {
 				}
 			}
 
+			echo '<div class="mailintelix-notices">';
 			printf(
 				'<div class="notice notice-success is-dismissible"><p>%s</p></div>',
 				esc_html( $messages[ $message ] )
 			);
+			echo '</div>';
 		}
 	}
 

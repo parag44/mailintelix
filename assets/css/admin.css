@@ -57,6 +57,15 @@
 	padding: 20px;
 }
 
+.mailintelix-notices {
+	margin: 0 0 18px;
+}
+
+.mailintelix-notices .notice {
+	margin: 0;
+	max-width: 760px;
+}
+
 .mailintelix-filter-bar {
 	align-items: end;
 	display: flex;
