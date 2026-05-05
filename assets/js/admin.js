@@ -2,38 +2,38 @@
 	'use strict';
 
 	function openModal(content) {
-		$('#mailintelix-modal-content').html(content);
-		$('#mailintelix-preview-modal').addClass('is-open').attr('aria-hidden', 'false');
+		$('#simple-mail-logger-modal-content').html(content);
+		$('#simple-mail-logger-preview-modal').addClass('is-open').attr('aria-hidden', 'false');
 	}
 
 	function closeModal() {
-		$('#mailintelix-preview-modal').removeClass('is-open').attr('aria-hidden', 'true');
-		$('#mailintelix-modal-content').empty();
+		$('#simple-mail-logger-preview-modal').removeClass('is-open').attr('aria-hidden', 'true');
+		$('#simple-mail-logger-modal-content').empty();
 	}
 
-	$(document).on('click', '.mailintelix-view-log', function () {
+	$(document).on('click', '.simple-mail-logger-view-log', function () {
 		var logId = $(this).data('log-id');
 
-		openModal('<p>' + MailIntelixAdmin.i18n.loading + '</p>');
+		openModal('<p>' + SimpleMailLoggerAdmin.i18n.loading + '</p>');
 
-		$.post(MailIntelixAdmin.ajaxUrl, {
-			action: 'mailintelix_get_log',
-			nonce: MailIntelixAdmin.nonce,
+		$.post(SimpleMailLoggerAdmin.ajaxUrl, {
+			action: 'simple_mail_logger_get_log',
+			nonce: SimpleMailLoggerAdmin.nonce,
 			log_id: logId
 		}).done(function (response) {
 			if (response && response.success && response.data.html) {
 				openModal(response.data.html);
 			} else {
-				openModal('<p>' + MailIntelixAdmin.i18n.error + '</p>');
+				openModal('<p>' + SimpleMailLoggerAdmin.i18n.error + '</p>');
 			}
 		}).fail(function () {
-			openModal('<p>' + MailIntelixAdmin.i18n.error + '</p>');
+			openModal('<p>' + SimpleMailLoggerAdmin.i18n.error + '</p>');
 		});
 	});
 
-	$(document).on('click', '[data-mailintelix-close]', closeModal);
+	$(document).on('click', '[data-simple-mail-logger-close]', closeModal);
 
-	$(document).on('click', '#mailintelix-preview-modal', function (event) {
+	$(document).on('click', '#simple-mail-logger-preview-modal', function (event) {
 		if (event.target === this) {
 			closeModal();
 		}
@@ -45,24 +45,24 @@
 		}
 	});
 
-	$(document).on('click', '.mailintelix-delete-link', function (event) {
-		if (!window.confirm(MailIntelixAdmin.i18n.confirmDelete)) {
+	$(document).on('click', '.simple-mail-logger-delete-link', function (event) {
+		if (!window.confirm(SimpleMailLoggerAdmin.i18n.confirmDelete)) {
 			event.preventDefault();
 		}
 	});
 
-	$(document).on('submit', 'form[data-mailintelix-confirm]', function (event) {
-		if (!window.confirm($(this).data('mailintelix-confirm'))) {
+	$(document).on('submit', 'form[data-simple-mail-logger-confirm]', function (event) {
+		if (!window.confirm($(this).data('simple-mail-logger-confirm'))) {
 			event.preventDefault();
 		}
 	});
 
-	$(document).on('click', '[data-mailintelix-tab]', function () {
-		var tab = $(this).data('mailintelix-tab');
+	$(document).on('click', '[data-simple-mail-logger-tab]', function () {
+		var tab = $(this).data('simple-mail-logger-tab');
 
-		$('[data-mailintelix-tab]').removeClass('is-active');
-		$('[data-mailintelix-panel]').removeClass('is-active');
+		$('[data-simple-mail-logger-tab]').removeClass('is-active');
+		$('[data-simple-mail-logger-panel]').removeClass('is-active');
 		$(this).addClass('is-active');
-		$('[data-mailintelix-panel="' + tab + '"]').addClass('is-active');
+		$('[data-simple-mail-logger-panel="' + tab + '"]').addClass('is-active');
 	});
 })(jQuery);

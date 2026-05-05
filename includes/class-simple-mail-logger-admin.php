@@ -2,7 +2,7 @@
 /**
  * Admin controller.
  *
- * @package MailIntelix
+ * @package Simple Mail Logger
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Registers admin menus, assets, and log actions.
  */
-class MailIntelix_Admin {
+class Simple_Mail_Logger_Admin {
 	/**
 	 * Register admin hooks.
 	 *
@@ -22,10 +22,10 @@ class MailIntelix_Admin {
 		add_action( 'admin_bar_menu', array( __CLASS__, 'register_admin_bar_link' ), 80 );
 		add_action( 'in_admin_header', array( __CLASS__, 'suppress_admin_notices' ), 0 );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
-		add_action( 'admin_post_mailintelix_delete_log', array( __CLASS__, 'handle_delete_log' ) );
-		add_action( 'admin_post_mailintelix_resend_log', array( __CLASS__, 'handle_resend_log' ) );
-		add_action( 'wp_ajax_mailintelix_get_log', array( __CLASS__, 'ajax_get_log' ) );
-		add_action( 'wp_ajax_mailintelix_delete_log', array( __CLASS__, 'ajax_delete_log' ) );
+		add_action( 'admin_post_simple_mail_logger_delete_log', array( __CLASS__, 'handle_delete_log' ) );
+		add_action( 'admin_post_simple_mail_logger_resend_log', array( __CLASS__, 'handle_resend_log' ) );
+		add_action( 'wp_ajax_simple_mail_logger_get_log', array( __CLASS__, 'ajax_get_log' ) );
+		add_action( 'wp_ajax_simple_mail_logger_delete_log', array( __CLASS__, 'ajax_delete_log' ) );
 	}
 
 	/**
@@ -34,7 +34,7 @@ class MailIntelix_Admin {
 	 * @return void
 	 */
 	public static function handle_bulk_log_action() {
-		if ( ! is_admin() || 'mailintelix' !== mailintelix_get_request_value( 'page' ) ) {
+		if ( ! is_admin() || 'simple-mail-logger' !== simple_mail_logger_get_request_value( 'page' ) ) {
 			return;
 		}
 
@@ -50,20 +50,20 @@ class MailIntelix_Admin {
 		}
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to perform this action.', 'mailintelix' ) );
+			wp_die( esc_html__( 'You do not have permission to perform this action.', 'simple-mail-logger' ) );
 		}
 
-		check_admin_referer( 'bulk-mailintelix_logs' );
+		check_admin_referer( 'bulk-simple_mail_logger_logs' );
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified by check_admin_referer() above.
 		$ids           = isset( $_POST['log_ids'] ) ? array_map( 'absint', (array) wp_unslash( $_POST['log_ids'] ) ) : array();
-		$deleted_count = MailIntelix_Logger::delete_logs( $ids );
+		$deleted_count = Simple_Mail_Logger_Logger::delete_logs( $ids );
 
 		wp_safe_redirect(
 			self::logs_url(
 				array(
-					'mailintelix_message'       => 'bulk',
-					'mailintelix_deleted_count' => absint( $deleted_count ),
+					'simple_mail_logger_message'       => 'bulk',
+					'simple_mail_logger_deleted_count' => absint( $deleted_count ),
 				)
 			)
 		);
@@ -101,23 +101,23 @@ class MailIntelix_Admin {
 
 		$wp_admin_bar->add_node(
 			array(
-				'id'    => 'mailintelix-email-logs',
-				'title' => __( 'MailIntelix Logs', 'mailintelix' ),
+				'id'    => 'simple-mail-logger-email-logs',
+				'title' => __( 'Simple Mail Logger Logs', 'simple-mail-logger' ),
 				'href'  => self::logs_url(),
 				'meta'  => array(
-					'title' => __( 'View MailIntelix email logs', 'mailintelix' ),
+					'title' => __( 'View Simple Mail Logger email logs', 'simple-mail-logger' ),
 				),
 			)
 		);
 	}
 
 	/**
-	 * Hide third-party admin notices on MailIntelix screens.
+	 * Hide third-party admin notices on Simple Mail Logger screens.
 	 *
 	 * @return void
 	 */
 	public static function suppress_admin_notices() {
-		if ( ! self::is_mailintelix_screen() ) {
+		if ( ! self::is_simple_mail_logger_screen() ) {
 			return;
 		}
 
@@ -129,61 +129,61 @@ class MailIntelix_Admin {
 	}
 
 	/**
-	 * Check whether current admin page belongs to MailIntelix.
+	 * Check whether current admin page belongs to Simple Mail Logger.
 	 *
 	 * @return bool
 	 */
-	private static function is_mailintelix_screen() {
+	private static function is_simple_mail_logger_screen() {
 		if ( ! is_admin() ) {
 			return false;
 		}
 
-		$page = mailintelix_get_request_value( 'page' );
+		$page = simple_mail_logger_get_request_value( 'page' );
 
-		return 0 === strpos( $page, 'mailintelix' );
+		return 0 === strpos( $page, 'simple-mail-logger' );
 	}
 
 	/**
-	 * Register MailIntelix admin menu.
+	 * Register Simple Mail Logger admin menu.
 	 *
 	 * @return void
 	 */
 	public static function register_menu() {
 		add_menu_page(
-			__( 'MailIntelix', 'mailintelix' ),
-			__( 'MailIntelix', 'mailintelix' ),
+			__( 'Simple Mail Logger', 'simple-mail-logger' ),
+			__( 'Simple Mail Logger', 'simple-mail-logger' ),
 			'manage_options',
-			'mailintelix',
+			'simple-mail-logger',
 			array( __CLASS__, 'render_logs_page' ),
 			'dashicons-email',
 			80
 		);
 
 		add_submenu_page(
-			'mailintelix',
-			__( 'Email Logs', 'mailintelix' ),
-			__( 'Email Logs', 'mailintelix' ),
+			'simple-mail-logger',
+			__( 'Email Logs', 'simple-mail-logger' ),
+			__( 'Email Logs', 'simple-mail-logger' ),
 			'manage_options',
-			'mailintelix',
+			'simple-mail-logger',
 			array( __CLASS__, 'render_logs_page' )
 		);
 
 		add_submenu_page(
-			'mailintelix',
-			__( 'Settings', 'mailintelix' ),
-			__( 'Settings', 'mailintelix' ),
+			'simple-mail-logger',
+			__( 'Settings', 'simple-mail-logger' ),
+			__( 'Settings', 'simple-mail-logger' ),
 			'manage_options',
-			'mailintelix-settings',
-			array( 'MailIntelix_Settings', 'render_page' )
+			'simple-mail-logger-settings',
+			array( 'Simple_Mail_Logger_Settings', 'render_page' )
 		);
 
 		add_submenu_page(
-			'mailintelix',
-			__( 'Tools', 'mailintelix' ),
-			__( 'Tools', 'mailintelix' ),
+			'simple-mail-logger',
+			__( 'Tools', 'simple-mail-logger' ),
+			__( 'Tools', 'simple-mail-logger' ),
 			'manage_options',
-			'mailintelix-tools',
-			array( 'MailIntelix_Tools', 'render_page' )
+			'simple-mail-logger-tools',
+			array( 'Simple_Mail_Logger_Tools', 'render_page' )
 		);
 	}
 
@@ -194,35 +194,35 @@ class MailIntelix_Admin {
 	 * @return void
 	 */
 	public static function enqueue_assets( $hook ) {
-		if ( false === strpos( $hook, 'mailintelix' ) ) {
+		if ( false === strpos( $hook, 'simple-mail-logger' ) ) {
 			return;
 		}
 
 		wp_enqueue_style(
-			'mailintelix-admin',
-			MAILINTELIX_PLUGIN_URL . 'assets/css/admin.css',
+			'simple-mail-logger-admin',
+			SIMPLE_MAIL_LOGGER_PLUGIN_URL . 'assets/css/admin.css',
 			array(),
-			MAILINTELIX_VERSION
+			SIMPLE_MAIL_LOGGER_VERSION
 		);
 
 		wp_enqueue_script(
-			'mailintelix-admin',
-			MAILINTELIX_PLUGIN_URL . 'assets/js/admin.js',
+			'simple-mail-logger-admin',
+			SIMPLE_MAIL_LOGGER_PLUGIN_URL . 'assets/js/admin.js',
 			array( 'jquery' ),
-			MAILINTELIX_VERSION,
+			SIMPLE_MAIL_LOGGER_VERSION,
 			true
 		);
 
 		wp_localize_script(
-			'mailintelix-admin',
-			'MailIntelixAdmin',
+			'simple-mail-logger-admin',
+			'SimpleMailLoggerAdmin',
 			array(
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'mailintelix_ajax' ),
+				'nonce'   => wp_create_nonce( 'simple_mail_logger_ajax' ),
 				'i18n'    => array(
-					'confirmDelete' => __( 'Delete this email log?', 'mailintelix' ),
-					'loading'       => __( 'Loading email preview...', 'mailintelix' ),
-					'error'         => __( 'Could not load this email log.', 'mailintelix' ),
+					'confirmDelete' => __( 'Delete this email log?', 'simple-mail-logger' ),
+					'loading'       => __( 'Loading email preview...', 'simple-mail-logger' ),
+					'error'         => __( 'Could not load this email log.', 'simple-mail-logger' ),
 				),
 			)
 		);
@@ -235,49 +235,49 @@ class MailIntelix_Admin {
 	 */
 	public static function render_logs_page() {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'mailintelix' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'simple-mail-logger' ) );
 		}
 
 		require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
-		require_once MAILINTELIX_PLUGIN_DIR . 'includes/class-mailintelix-table.php';
+		require_once SIMPLE_MAIL_LOGGER_PLUGIN_DIR . 'includes/class-simple-mail-logger-table.php';
 
-		$table = new MailIntelix_Table();
+		$table = new Simple_Mail_Logger_Table();
 		$table->prepare_items();
 
-		self::render_header( __( 'Email Logs', 'mailintelix' ) );
+		self::render_header( __( 'Email Logs', 'simple-mail-logger' ) );
 		self::render_notices();
 		?>
-		<div class="mailintelix-card">
-			<form method="get" class="mailintelix-filters">
-				<input type="hidden" name="page" value="mailintelix" />
-				<div class="mailintelix-filter-bar">
-					<div class="mailintelix-filter-group">
+		<div class="simple-mail-logger-card">
+			<form method="get" class="simple-mail-logger-filters">
+				<input type="hidden" name="page" value="simple-mail-logger" />
+				<div class="simple-mail-logger-filter-bar">
+					<div class="simple-mail-logger-filter-group">
 						<?php $table->views(); ?>
-						<div class="mailintelix-filter-row">
+						<div class="simple-mail-logger-filter-row">
 							<label>
-								<span><?php esc_html_e( 'From', 'mailintelix' ); ?></span>
-								<input type="date" name="date_from" value="<?php echo esc_attr( mailintelix_get_request_value( 'date_from' ) ); ?>" />
+								<span><?php esc_html_e( 'From', 'simple-mail-logger' ); ?></span>
+								<input type="date" name="date_from" value="<?php echo esc_attr( simple_mail_logger_get_request_value( 'date_from' ) ); ?>" />
 							</label>
 							<label>
-								<span><?php esc_html_e( 'To', 'mailintelix' ); ?></span>
-								<input type="date" name="date_to" value="<?php echo esc_attr( mailintelix_get_request_value( 'date_to' ) ); ?>" />
+								<span><?php esc_html_e( 'To', 'simple-mail-logger' ); ?></span>
+								<input type="date" name="date_to" value="<?php echo esc_attr( simple_mail_logger_get_request_value( 'date_to' ) ); ?>" />
 							</label>
 						</div>
 					</div>
-					<div class="mailintelix-search-group">
-						<?php $table->search_box( __( 'Search logs', 'mailintelix' ), 'mailintelix-search' ); ?>
+					<div class="simple-mail-logger-search-group">
+						<?php $table->search_box( __( 'Search logs', 'simple-mail-logger' ), 'simple-mail-logger-search' ); ?>
 					</div>
 				</div>
 			</form>
 			<form method="post" action="<?php echo esc_url( self::logs_url() ); ?>">
-				<input type="hidden" name="page" value="mailintelix" />
+				<input type="hidden" name="page" value="simple-mail-logger" />
 				<?php $table->display(); ?>
 			</form>
 		</div>
-		<div class="mailintelix-modal" id="mailintelix-preview-modal" aria-hidden="true">
-			<div class="mailintelix-modal__panel" role="dialog" aria-modal="true" aria-labelledby="mailintelix-modal-title">
-				<button type="button" class="mailintelix-modal__close" data-mailintelix-close aria-label="<?php esc_attr_e( 'Close preview', 'mailintelix' ); ?>">&times;</button>
-				<div id="mailintelix-modal-content"></div>
+		<div class="simple-mail-logger-modal" id="simple-mail-logger-preview-modal" aria-hidden="true">
+			<div class="simple-mail-logger-modal__panel" role="dialog" aria-modal="true" aria-labelledby="simple-mail-logger-modal-title">
+				<button type="button" class="simple-mail-logger-modal__close" data-simple-mail-logger-close aria-label="<?php esc_attr_e( 'Close preview', 'simple-mail-logger' ); ?>">&times;</button>
+				<div id="simple-mail-logger-modal-content"></div>
 			</div>
 		</div>
 		<?php
@@ -292,14 +292,14 @@ class MailIntelix_Admin {
 	 */
 	public static function render_header( $title ) {
 		?>
-		<div class="wrap mailintelix-wrap">
-			<div class="mailintelix-hero">
-				<div class="mailintelix-logo" aria-hidden="true">
-					<span class="dashicons dashicons-email mailintelix-logo__icon"></span>
+		<div class="wrap simple-mail-logger-wrap">
+			<div class="simple-mail-logger-hero">
+				<div class="simple-mail-logger-logo" aria-hidden="true">
+					<span class="dashicons dashicons-email simple-mail-logger-logo__icon"></span>
 				</div>
-				<div class="mailintelix-hero__content">
+				<div class="simple-mail-logger-hero__content">
 					<h1><?php echo esc_html( $title ); ?></h1>
-					<p><?php esc_html_e( 'Email logging, debugging, and delivery insights for WordPress.', 'mailintelix' ); ?></p>
+					<p><?php esc_html_e( 'Email logging, debugging, and delivery insights for WordPress.', 'simple-mail-logger' ); ?></p>
 				</div>
 			</div>
 		<?php
@@ -320,35 +320,35 @@ class MailIntelix_Admin {
 	 * @return void
 	 */
 	public static function render_notices() {
-		$message = mailintelix_get_request_value( 'mailintelix_message' );
+		$message = simple_mail_logger_get_request_value( 'simple_mail_logger_message' );
 		if ( empty( $message ) ) {
 			return;
 		}
 
 		$messages = array(
-			'deleted'   => __( 'Email log deleted.', 'mailintelix' ),
-			'bulk'      => __( 'Selected email logs deleted.', 'mailintelix' ),
-			'resent'    => __( 'Email resend requested.', 'mailintelix' ),
-			'cleared'   => __( 'All email logs cleared.', 'mailintelix' ),
-			'settings'  => __( 'Settings saved.', 'mailintelix' ),
-			'test_sent' => __( 'Test email sent. Check Email Logs for the result.', 'mailintelix' ),
+			'deleted'   => __( 'Email log deleted.', 'simple-mail-logger' ),
+			'bulk'      => __( 'Selected email logs deleted.', 'simple-mail-logger' ),
+			'resent'    => __( 'Email resend requested.', 'simple-mail-logger' ),
+			'cleared'   => __( 'All email logs cleared.', 'simple-mail-logger' ),
+			'settings'  => __( 'Settings saved.', 'simple-mail-logger' ),
+			'test_sent' => __( 'Test email sent. Check Email Logs for the result.', 'simple-mail-logger' ),
 		);
 
 		if ( isset( $messages[ $message ] ) ) {
 			if ( 'bulk' === $message ) {
-				$count = absint( mailintelix_get_request_value( 'mailintelix_deleted_count' ) );
+				$count = absint( simple_mail_logger_get_request_value( 'simple_mail_logger_deleted_count' ) );
 				if ( $count > 0 ) {
 					$messages[ $message ] = sprintf(
 						/* translators: %d: number of deleted email logs. */
-						_n( '%d email log deleted.', '%d email logs deleted.', $count, 'mailintelix' ),
+						_n( '%d email log deleted.', '%d email logs deleted.', $count, 'simple-mail-logger' ),
 						$count
 					);
 				}
 			}
 
-			echo '<div class="mailintelix-notices">';
+			echo '<div class="simple-mail-logger-notices">';
 			printf(
-				'<div class="mailintelix-notice mailintelix-notice--success" role="status"><p>%s</p></div>',
+				'<div class="simple-mail-logger-notice simple-mail-logger-notice--success" role="status"><p>%s</p></div>',
 				esc_html( $messages[ $message ] )
 			);
 			echo '</div>';
@@ -361,13 +361,13 @@ class MailIntelix_Admin {
 	 * @return void
 	 */
 	public static function handle_delete_log() {
-		self::verify_action_request( 'mailintelix_delete_log' );
+		self::verify_action_request( 'simple_mail_logger_delete_log' );
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce is verified by verify_action_request() above.
 		$log_id = isset( $_GET['log_id'] ) ? absint( wp_unslash( $_GET['log_id'] ) ) : 0;
-		MailIntelix_Logger::delete_log( $log_id );
+		Simple_Mail_Logger_Logger::delete_log( $log_id );
 
-		wp_safe_redirect( self::logs_url( array( 'mailintelix_message' => 'deleted' ) ) );
+		wp_safe_redirect( self::logs_url( array( 'simple_mail_logger_message' => 'deleted' ) ) );
 		exit;
 	}
 
@@ -377,13 +377,13 @@ class MailIntelix_Admin {
 	 * @return void
 	 */
 	public static function handle_resend_log() {
-		self::verify_action_request( 'mailintelix_resend_log' );
+		self::verify_action_request( 'simple_mail_logger_resend_log' );
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce is verified by verify_action_request() above.
 		$log_id = isset( $_GET['log_id'] ) ? absint( wp_unslash( $_GET['log_id'] ) ) : 0;
-		MailIntelix_Logger::resend( $log_id );
+		Simple_Mail_Logger_Logger::resend( $log_id );
 
-		wp_safe_redirect( self::logs_url( array( 'mailintelix_message' => 'resent' ) ) );
+		wp_safe_redirect( self::logs_url( array( 'simple_mail_logger_message' => 'resent' ) ) );
 		exit;
 	}
 
@@ -397,10 +397,10 @@ class MailIntelix_Admin {
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- AJAX nonce is verified by verify_ajax_request() above.
 		$log_id = isset( $_POST['log_id'] ) ? absint( wp_unslash( $_POST['log_id'] ) ) : 0;
-		$log    = MailIntelix_Logger::get_log( $log_id );
+		$log    = Simple_Mail_Logger_Logger::get_log( $log_id );
 
 		if ( ! $log ) {
-			wp_send_json_error( array( 'message' => __( 'Email log not found.', 'mailintelix' ) ), 404 );
+			wp_send_json_error( array( 'message' => __( 'Email log not found.', 'simple-mail-logger' ) ), 404 );
 		}
 
 		wp_send_json_success(
@@ -420,7 +420,7 @@ class MailIntelix_Admin {
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- AJAX nonce is verified by verify_ajax_request() above.
 		$log_id = isset( $_POST['log_id'] ) ? absint( wp_unslash( $_POST['log_id'] ) ) : 0;
-		MailIntelix_Logger::delete_log( $log_id );
+		Simple_Mail_Logger_Logger::delete_log( $log_id );
 
 		wp_send_json_success();
 	}
@@ -434,34 +434,34 @@ class MailIntelix_Admin {
 	private static function render_preview_html( $log ) {
 		ob_start();
 		?>
-		<div class="mailintelix-preview">
-			<h2 id="mailintelix-modal-title"><?php echo esc_html( $log->subject ? $log->subject : __( '(No subject)', 'mailintelix' ) ); ?></h2>
-			<div class="mailintelix-preview__meta">
-				<span><?php echo wp_kses_post( mailintelix_status_badge( $log->status ) ); ?></span>
-				<span><strong><?php esc_html_e( 'Sent at:', 'mailintelix' ); ?></strong> <?php echo esc_html( mysql2date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $log->sent_at ) ); ?></span>
-				<span><strong><?php esc_html_e( 'To:', 'mailintelix' ); ?></strong> <?php echo esc_html( $log->to_email ); ?></span>
+		<div class="simple-mail-logger-preview">
+			<h2 id="simple-mail-logger-modal-title"><?php echo esc_html( $log->subject ? $log->subject : __( '(No subject)', 'simple-mail-logger' ) ); ?></h2>
+			<div class="simple-mail-logger-preview__meta">
+				<span><?php echo wp_kses_post( simple_mail_logger_status_badge( $log->status ) ); ?></span>
+				<span><strong><?php esc_html_e( 'Sent at:', 'simple-mail-logger' ); ?></strong> <?php echo esc_html( mysql2date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $log->sent_at ) ); ?></span>
+				<span><strong><?php esc_html_e( 'To:', 'simple-mail-logger' ); ?></strong> <?php echo esc_html( $log->to_email ); ?></span>
 			</div>
 			<?php if ( ! empty( $log->error_message ) ) : ?>
-				<div class="mailintelix-error-block"><?php echo esc_html( $log->error_message ); ?></div>
+				<div class="simple-mail-logger-error-block"><?php echo esc_html( $log->error_message ); ?></div>
 			<?php endif; ?>
-			<div class="mailintelix-preview__grid">
+			<div class="simple-mail-logger-preview__grid">
 				<div>
-					<h3><?php esc_html_e( 'Headers', 'mailintelix' ); ?></h3>
-					<?php echo wp_kses_post( self::render_meta_value( $log->headers, __( 'No headers logged for this email.', 'mailintelix' ) ) ); ?>
+					<h3><?php esc_html_e( 'Headers', 'simple-mail-logger' ); ?></h3>
+					<?php echo wp_kses_post( self::render_meta_value( $log->headers, __( 'No headers logged for this email.', 'simple-mail-logger' ) ) ); ?>
 				</div>
 				<div>
-					<h3><?php esc_html_e( 'Attachments', 'mailintelix' ); ?></h3>
-					<?php echo wp_kses_post( self::render_meta_value( $log->attachments, __( 'No attachments for this email.', 'mailintelix' ) ) ); ?>
+					<h3><?php esc_html_e( 'Attachments', 'simple-mail-logger' ); ?></h3>
+					<?php echo wp_kses_post( self::render_meta_value( $log->attachments, __( 'No attachments for this email.', 'simple-mail-logger' ) ) ); ?>
 				</div>
 			</div>
-			<div class="mailintelix-tabs">
-				<button type="button" class="is-active" data-mailintelix-tab="html"><?php esc_html_e( 'HTML view', 'mailintelix' ); ?></button>
-				<button type="button" data-mailintelix-tab="source"><?php esc_html_e( 'Text/source view', 'mailintelix' ); ?></button>
+			<div class="simple-mail-logger-tabs">
+				<button type="button" class="is-active" data-simple-mail-logger-tab="html"><?php esc_html_e( 'HTML view', 'simple-mail-logger' ); ?></button>
+				<button type="button" data-simple-mail-logger-tab="source"><?php esc_html_e( 'Text/source view', 'simple-mail-logger' ); ?></button>
 			</div>
-			<div class="mailintelix-tab-panel is-active" data-mailintelix-panel="html">
-				<iframe class="mailintelix-email-frame" title="<?php esc_attr_e( 'Email HTML preview', 'mailintelix' ); ?>" sandbox srcdoc="<?php echo esc_attr( $log->message ); ?>"></iframe>
+			<div class="simple-mail-logger-tab-panel is-active" data-simple-mail-logger-panel="html">
+				<iframe class="simple-mail-logger-email-frame" title="<?php esc_attr_e( 'Email HTML preview', 'simple-mail-logger' ); ?>" sandbox srcdoc="<?php echo esc_attr( $log->message ); ?>"></iframe>
 			</div>
-			<div class="mailintelix-tab-panel" data-mailintelix-panel="source">
+			<div class="simple-mail-logger-tab-panel" data-simple-mail-logger-panel="source">
 				<pre><?php echo esc_html( $log->message ); ?></pre>
 			</div>
 		</div>
@@ -481,7 +481,7 @@ class MailIntelix_Admin {
 
 		if ( '' === $trimmed || '[]' === $trimmed || '{}' === $trimmed ) {
 			return sprintf(
-				'<div class="mailintelix-empty-meta">%s</div>',
+				'<div class="simple-mail-logger-empty-meta">%s</div>',
 				esc_html( $empty_message )
 			);
 		}
@@ -500,7 +500,7 @@ class MailIntelix_Admin {
 	 */
 	private static function verify_action_request( $action ) {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to perform this action.', 'mailintelix' ) );
+			wp_die( esc_html__( 'You do not have permission to perform this action.', 'simple-mail-logger' ) );
 		}
 
 		check_admin_referer( $action );
@@ -513,10 +513,10 @@ class MailIntelix_Admin {
 	 */
 	private static function verify_ajax_request() {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'mailintelix' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'simple-mail-logger' ) ), 403 );
 		}
 
-		check_ajax_referer( 'mailintelix_ajax', 'nonce' );
+		check_ajax_referer( 'simple_mail_logger_ajax', 'nonce' );
 	}
 
 	/**
@@ -526,7 +526,7 @@ class MailIntelix_Admin {
 	 * @return string
 	 */
 	public static function logs_url( $args = array() ) {
-		return add_query_arg( $args, admin_url( 'admin.php?page=mailintelix' ) );
+		return add_query_arg( $args, admin_url( 'admin.php?page=simple-mail-logger' ) );
 	}
 }
 
@@ -536,7 +536,7 @@ class MailIntelix_Admin {
  * @param string $key Request key.
  * @return string
  */
-function mailintelix_get_request_value( $key ) {
+function simple_mail_logger_get_request_value( $key ) {
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only request helper for admin filters and screen detection.
 	if ( ! isset( $_REQUEST[ $key ] ) ) {
 		return '';
@@ -554,18 +554,18 @@ function mailintelix_get_request_value( $key ) {
  * @param string $status Log status.
  * @return string
  */
-function mailintelix_status_badge( $status ) {
+function simple_mail_logger_status_badge( $status ) {
 	$status = sanitize_key( $status );
-	$label  = __( 'Unknown', 'mailintelix' );
+	$label  = __( 'Unknown', 'simple-mail-logger' );
 
 	if ( 'sent' === $status ) {
-		$label = __( 'Sent', 'mailintelix' );
+		$label = __( 'Sent', 'simple-mail-logger' );
 	} elseif ( 'failed' === $status ) {
-		$label = __( 'Failed', 'mailintelix' );
+		$label = __( 'Failed', 'simple-mail-logger' );
 	}
 
 	return sprintf(
-		'<span class="mailintelix-badge mailintelix-badge--%1$s">%2$s</span>',
+		'<span class="simple-mail-logger-badge simple-mail-logger-badge--%1$s">%2$s</span>',
 		esc_attr( $status ),
 		esc_html( $label )
 	);

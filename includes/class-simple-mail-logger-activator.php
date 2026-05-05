@@ -2,7 +2,7 @@
 /**
  * Activation tasks.
  *
- * @package MailIntelix
+ * @package Simple Mail Logger
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Creates database schema and default settings.
  */
-class MailIntelix_Activator {
+class Simple_Mail_Logger_Activator {
 	/**
 	 * Run plugin activation tasks.
 	 *
@@ -19,9 +19,9 @@ class MailIntelix_Activator {
 	public static function activate() {
 		self::create_table();
 
-		if ( false === get_option( MAILINTELIX_SETTINGS_OPTION, false ) ) {
+		if ( false === get_option( SIMPLE_MAIL_LOGGER_SETTINGS_OPTION, false ) ) {
 			add_option(
-				MAILINTELIX_SETTINGS_OPTION,
+				SIMPLE_MAIL_LOGGER_SETTINGS_OPTION,
 				array(
 					'logging_enabled'         => 1,
 					'retention_days'          => 0,
@@ -40,7 +40,7 @@ class MailIntelix_Activator {
 	public static function create_table() {
 		global $wpdb;
 
-		$table_name      = mailintelix_get_logs_table();
+		$table_name      = simple_mail_logger_get_logs_table();
 		$charset_collate = $wpdb->get_charset_collate();
 
 		$sql = "CREATE TABLE {$table_name} (

@@ -2,5 +2,5 @@
 /**
  * Silence is golden.
  *
- * @package MailIntelix
+ * @package Simple Mail Logger
  */

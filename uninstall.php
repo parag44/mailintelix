@@ -2,17 +2,17 @@
 /**
  * Uninstall cleanup.
  *
- * @package MailIntelix
+ * @package Simple Mail Logger
  */
 
 defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 
-$mailintelix_settings = get_option( 'mailintelix_settings', array() );
+$simple_mail_logger_settings = get_option( 'simple_mail_logger_settings', array() );
 
-if ( is_array( $mailintelix_settings ) && ! empty( $mailintelix_settings['delete_data_on_uninstall'] ) ) {
+if ( is_array( $simple_mail_logger_settings ) && ! empty( $simple_mail_logger_settings['delete_data_on_uninstall'] ) ) {
 	global $wpdb;
 
 	// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange -- Uninstall cleanup for plugin-owned custom table when the user enabled cleanup.
-	$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'mailintelix_logs' );
-	delete_option( 'mailintelix_settings' );
+	$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'simple_mail_logger_logs' );
+	delete_option( 'simple_mail_logger_settings' );
 }

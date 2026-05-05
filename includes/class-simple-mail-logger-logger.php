@@ -2,7 +2,7 @@
 /**
  * Email logger.
  *
- * @package MailIntelix
+ * @package Simple Mail Logger
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Hooks into wp_mail outcomes and persists email logs.
  */
-class MailIntelix_Logger {
+class Simple_Mail_Logger_Logger {
 	/**
 	 * Register mail hooks.
 	 *
@@ -83,9 +83,9 @@ class MailIntelix_Logger {
 		}
 
 		$now        = current_time( 'mysql' );
-		$table_name = mailintelix_get_logs_table();
+		$table_name = simple_mail_logger_get_logs_table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- MailIntelix stores email logs in its own custom table.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Simple Mail Logger stores email logs in its own custom table.
 		$inserted = $wpdb->insert(
 			$table_name,
 			array(
@@ -117,7 +117,7 @@ class MailIntelix_Logger {
 		$log = self::get_log( $log_id );
 
 		if ( ! $log ) {
-			return new WP_Error( 'mailintelix_missing_log', __( 'Email log not found.', 'mailintelix' ) );
+			return new WP_Error( 'simple_mail_logger_missing_log', __( 'Email log not found.', 'simple-mail-logger' ) );
 		}
 
 		$to          = self::decode_value( $log->to_email );
@@ -136,7 +136,7 @@ class MailIntelix_Logger {
 	public static function get_log( $log_id ) {
 		global $wpdb;
 
-		$table_name = esc_sql( mailintelix_get_logs_table() );
+		$table_name = esc_sql( simple_mail_logger_get_logs_table() );
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Email logs are mutable admin data from a custom table.
 		return $wpdb->get_row(
@@ -159,7 +159,7 @@ class MailIntelix_Logger {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Deleting custom-table email log data.
 		return $wpdb->delete(
-			mailintelix_get_logs_table(),
+			simple_mail_logger_get_logs_table(),
 			array( 'id' => absint( $log_id ) ),
 			array( '%d' )
 		);
@@ -185,7 +185,7 @@ class MailIntelix_Logger {
 		return (int) $wpdb->query(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- Table name is plugin-owned and placeholders are generated from sanitized IDs.
-				"DELETE FROM " . mailintelix_get_logs_table() . " WHERE id IN ({$placeholders})",
+				"DELETE FROM " . simple_mail_logger_get_logs_table() . " WHERE id IN ({$placeholders})",
 				$ids
 			)
 		);
@@ -200,7 +200,7 @@ class MailIntelix_Logger {
 		global $wpdb;
 
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Clearing plugin-owned custom table; no user input is included.
-		return $wpdb->query( 'TRUNCATE TABLE ' . mailintelix_get_logs_table() );
+		return $wpdb->query( 'TRUNCATE TABLE ' . simple_mail_logger_get_logs_table() );
 	}
 
 	/**
@@ -211,8 +211,8 @@ class MailIntelix_Logger {
 	public static function maybe_apply_retention() {
 		global $wpdb;
 
-		$settings   = mailintelix_get_settings();
-		$table_name = esc_sql( mailintelix_get_logs_table() );
+		$settings   = simple_mail_logger_get_settings();
+		$table_name = esc_sql( simple_mail_logger_get_logs_table() );
 
 		if ( ! empty( $settings['retention_days'] ) ) {
 			$days = absint( $settings['retention_days'] );
@@ -263,7 +263,7 @@ class MailIntelix_Logger {
 	 * @return bool
 	 */
 	private static function is_logging_enabled() {
-		$settings = mailintelix_get_settings();
+		$settings = simple_mail_logger_get_settings();
 
 		return ! empty( $settings['logging_enabled'] );
 	}
@@ -340,10 +340,10 @@ class MailIntelix_Logger {
  *
  * @return string
  */
-function mailintelix_get_logs_table() {
+function simple_mail_logger_get_logs_table() {
 	global $wpdb;
 
-	return $wpdb->prefix . MAILINTELIX_LOGS_TABLE;
+	return $wpdb->prefix . SIMPLE_MAIL_LOGGER_LOGS_TABLE;
 }
 
 /**
@@ -351,7 +351,7 @@ function mailintelix_get_logs_table() {
  *
  * @return array
  */
-function mailintelix_get_settings() {
+function simple_mail_logger_get_settings() {
 	$defaults = array(
 		'logging_enabled'          => 1,
 		'retention_days'           => 0,
@@ -359,7 +359,7 @@ function mailintelix_get_settings() {
 		'max_logs'                 => 5000,
 	);
 
-	$settings = get_option( MAILINTELIX_SETTINGS_OPTION, array() );
+	$settings = get_option( SIMPLE_MAIL_LOGGER_SETTINGS_OPTION, array() );
 
 	return wp_parse_args( is_array( $settings ) ? $settings : array(), $defaults );
 }
