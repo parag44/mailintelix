@@ -66,7 +66,15 @@
 		$('[data-simple-mail-logger-panel="' + tab + '"]').addClass('is-active');
 	});
 
-	$(document).on('change', '#simple-mail-logger-smtp-enabled', function () {
-		$('.simple-mail-logger-settings-form').toggleClass('is-smtp-enabled', $(this).is(':checked'));
-	});
+	function syncSmtpSettings() {
+		var $form = $('.simple-mail-logger-settings-form');
+		var smtpEnabled = $('#simple-mail-logger-smtp-enabled').is(':checked');
+		var smtpAuthEnabled = $('#simple-mail-logger-smtp-auth').is(':checked');
+
+		$form.toggleClass('is-smtp-enabled', smtpEnabled);
+		$form.toggleClass('is-smtp-auth-enabled', smtpEnabled && smtpAuthEnabled);
+	}
+
+	$(syncSmtpSettings);
+	$(document).on('change', '#simple-mail-logger-smtp-enabled, #simple-mail-logger-smtp-auth', syncSmtpSettings);
 })(jQuery);

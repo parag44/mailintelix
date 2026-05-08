@@ -347,12 +347,36 @@
 	margin: 26px 0;
 }
 
+.simple-mail-logger-smtp-panel {
+	background: #f8fafc;
+	border: 1px solid #dcdcde;
+	border-radius: 8px;
+	margin-top: 18px;
+	max-width: 1120px;
+	padding: 18px;
+}
+
+.simple-mail-logger-smtp-group + .simple-mail-logger-smtp-group {
+	border-top: 1px solid #e5e7eb;
+	margin-top: 22px;
+	padding-top: 22px;
+}
+
+.simple-mail-logger-smtp-group-header h3 {
+	font-size: 15px;
+	margin: 0 0 4px;
+}
+
+.simple-mail-logger-smtp-group-header .description {
+	margin: 0 0 14px;
+}
+
 .simple-mail-logger-settings-grid {
 	align-items: start;
 	display: grid;
-	gap: 22px 22px;
+	gap: 18px 22px;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
-	margin-top: 22px;
+	margin-top: 0;
 	max-width: 1120px;
 }
 
@@ -371,15 +395,19 @@
 }
 
 .simple-mail-logger-field--checkbox-control {
-	align-self: end;
+	align-self: stretch;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
 	min-height: 36px;
-	padding-bottom: 7px;
+	padding: 12px 14px;
 }
 
 .simple-mail-logger-field--checkbox-control label {
 	align-items: center;
 	display: inline-flex;
 	gap: 8px;
+	margin: 0;
 }
 
 .simple-mail-logger-field .description {
@@ -396,6 +424,11 @@
 
 .simple-mail-logger-settings-form:not(.is-smtp-enabled) .simple-mail-logger-smtp-action,
 .simple-mail-logger-settings-form:has(#simple-mail-logger-smtp-enabled:not(:checked)) .simple-mail-logger-smtp-action {
+	display: none !important;
+}
+
+.simple-mail-logger-settings-form:not(.is-smtp-auth-enabled) .simple-mail-logger-smtp-auth-fields,
+.simple-mail-logger-settings-form:has(#simple-mail-logger-smtp-auth:not(:checked)) .simple-mail-logger-smtp-auth-fields {
 	display: none !important;
 }
 

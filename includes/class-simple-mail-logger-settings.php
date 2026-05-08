@@ -31,11 +31,18 @@ class Simple_Mail_Logger_Settings {
 		}
 
 		$settings = simple_mail_logger_get_settings();
+		$form_classes = 'simple-mail-logger-card simple-mail-logger-settings-form';
+		if ( ! empty( $settings['smtp_enabled'] ) ) {
+			$form_classes .= ' is-smtp-enabled';
+		}
+		if ( ! empty( $settings['smtp_auth'] ) ) {
+			$form_classes .= ' is-smtp-auth-enabled';
+		}
 
 		Simple_Mail_Logger_Admin::render_header( __( 'Settings', 'simple-mail-logger' ) );
 		Simple_Mail_Logger_Admin::render_notices();
 		?>
-		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="simple-mail-logger-card simple-mail-logger-settings-form <?php echo empty( $settings['smtp_enabled'] ) ? '' : 'is-smtp-enabled'; ?>">
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="<?php echo esc_attr( $form_classes ); ?>">
 			<input type="hidden" name="action" value="simple_mail_logger_save_settings" />
 			<?php wp_nonce_field( 'simple_mail_logger_save_settings' ); ?>
 
@@ -82,55 +89,79 @@ class Simple_Mail_Logger_Settings {
 			</div>
 
 			<div class="simple-mail-logger-smtp-fields" data-simple-mail-logger-smtp-fields>
-				<div class="simple-mail-logger-settings-grid">
-					<div class="simple-mail-logger-field">
-						<label for="simple-mail-logger-smtp-host"><?php esc_html_e( 'SMTP host', 'simple-mail-logger' ); ?></label>
-						<input id="simple-mail-logger-smtp-host" type="text" name="smtp_host" value="<?php echo esc_attr( $settings['smtp_host'] ); ?>" placeholder="smtp.example.com" />
+				<div class="simple-mail-logger-smtp-panel">
+					<div class="simple-mail-logger-smtp-group">
+						<div class="simple-mail-logger-smtp-group-header">
+							<h3><?php esc_html_e( 'Server connection', 'simple-mail-logger' ); ?></h3>
+							<p class="description"><?php esc_html_e( 'Add the SMTP server details provided by your email host.', 'simple-mail-logger' ); ?></p>
+						</div>
+						<div class="simple-mail-logger-settings-grid">
+							<div class="simple-mail-logger-field">
+								<label for="simple-mail-logger-smtp-host"><?php esc_html_e( 'SMTP host', 'simple-mail-logger' ); ?></label>
+								<input id="simple-mail-logger-smtp-host" type="text" name="smtp_host" value="<?php echo esc_attr( $settings['smtp_host'] ); ?>" placeholder="smtp.example.com" />
+							</div>
+
+							<div class="simple-mail-logger-field">
+								<label for="simple-mail-logger-smtp-port"><?php esc_html_e( 'SMTP port', 'simple-mail-logger' ); ?></label>
+								<input id="simple-mail-logger-smtp-port" type="number" min="1" max="65535" step="1" name="smtp_port" value="<?php echo esc_attr( absint( $settings['smtp_port'] ) ); ?>" />
+							</div>
+
+							<div class="simple-mail-logger-field">
+								<label for="simple-mail-logger-smtp-encryption"><?php esc_html_e( 'Encryption', 'simple-mail-logger' ); ?></label>
+								<select id="simple-mail-logger-smtp-encryption" name="smtp_encryption">
+									<option value="none" <?php selected( 'none', $settings['smtp_encryption'] ); ?>><?php esc_html_e( 'None', 'simple-mail-logger' ); ?></option>
+									<option value="ssl" <?php selected( 'ssl', $settings['smtp_encryption'] ); ?>><?php esc_html_e( 'SSL', 'simple-mail-logger' ); ?></option>
+									<option value="tls" <?php selected( 'tls', $settings['smtp_encryption'] ); ?>><?php esc_html_e( 'TLS', 'simple-mail-logger' ); ?></option>
+								</select>
+							</div>
+
+							<div class="simple-mail-logger-field simple-mail-logger-field--checkbox-control">
+								<label for="simple-mail-logger-smtp-auth">
+									<input id="simple-mail-logger-smtp-auth" type="checkbox" name="smtp_auth" value="1" <?php checked( 1, absint( $settings['smtp_auth'] ) ); ?> />
+									<span><?php esc_html_e( 'Use SMTP authentication', 'simple-mail-logger' ); ?></span>
+								</label>
+								<p class="description"><?php esc_html_e( 'Enable this when your SMTP server requires a username and password.', 'simple-mail-logger' ); ?></p>
+							</div>
+						</div>
 					</div>
 
-					<div class="simple-mail-logger-field">
-						<label for="simple-mail-logger-smtp-port"><?php esc_html_e( 'SMTP port', 'simple-mail-logger' ); ?></label>
-						<input id="simple-mail-logger-smtp-port" type="number" min="1" max="65535" step="1" name="smtp_port" value="<?php echo esc_attr( absint( $settings['smtp_port'] ) ); ?>" />
+					<div class="simple-mail-logger-smtp-group simple-mail-logger-smtp-auth-fields" data-simple-mail-logger-smtp-auth-fields>
+						<div class="simple-mail-logger-smtp-group-header">
+							<h3><?php esc_html_e( 'Authentication', 'simple-mail-logger' ); ?></h3>
+							<p class="description"><?php esc_html_e( 'Enter the mailbox credentials used by your SMTP provider.', 'simple-mail-logger' ); ?></p>
+						</div>
+						<div class="simple-mail-logger-settings-grid">
+							<div class="simple-mail-logger-field">
+								<label for="simple-mail-logger-smtp-username"><?php esc_html_e( 'SMTP username', 'simple-mail-logger' ); ?></label>
+								<input id="simple-mail-logger-smtp-username" type="text" name="smtp_username" value="<?php echo esc_attr( $settings['smtp_username'] ); ?>" autocomplete="username" />
+							</div>
+
+							<div class="simple-mail-logger-field">
+								<label for="simple-mail-logger-smtp-password"><?php esc_html_e( 'SMTP password', 'simple-mail-logger' ); ?></label>
+								<input id="simple-mail-logger-smtp-password" type="password" name="smtp_password" value="<?php echo esc_attr( empty( $settings['smtp_password'] ) ? '' : Simple_Mail_Logger_SMTP::PASSWORD_MASK ); ?>" autocomplete="new-password" />
+								<p class="description"><?php esc_html_e( 'The saved password is masked. Type a new password to replace it.', 'simple-mail-logger' ); ?></p>
+							</div>
+						</div>
 					</div>
 
-					<div class="simple-mail-logger-field">
-						<label for="simple-mail-logger-smtp-encryption"><?php esc_html_e( 'Encryption', 'simple-mail-logger' ); ?></label>
-						<select id="simple-mail-logger-smtp-encryption" name="smtp_encryption">
-							<option value="none" <?php selected( 'none', $settings['smtp_encryption'] ); ?>><?php esc_html_e( 'None', 'simple-mail-logger' ); ?></option>
-							<option value="ssl" <?php selected( 'ssl', $settings['smtp_encryption'] ); ?>><?php esc_html_e( 'SSL', 'simple-mail-logger' ); ?></option>
-							<option value="tls" <?php selected( 'tls', $settings['smtp_encryption'] ); ?>><?php esc_html_e( 'TLS', 'simple-mail-logger' ); ?></option>
-						</select>
-					</div>
+					<div class="simple-mail-logger-smtp-group">
+						<div class="simple-mail-logger-smtp-group-header">
+							<h3><?php esc_html_e( 'Sender identity', 'simple-mail-logger' ); ?></h3>
+							<p class="description"><?php esc_html_e( 'Set the From address and name used for outgoing WordPress emails.', 'simple-mail-logger' ); ?></p>
+						</div>
+						<div class="simple-mail-logger-settings-grid">
+							<div class="simple-mail-logger-field">
+								<label for="simple-mail-logger-smtp-from-email"><?php esc_html_e( 'From email', 'simple-mail-logger' ); ?></label>
+								<input id="simple-mail-logger-smtp-from-email" type="email" name="smtp_from_email" value="<?php echo esc_attr( $settings['smtp_from_email'] ); ?>" />
+							</div>
 
-					<div class="simple-mail-logger-field simple-mail-logger-field--checkbox-control">
-						<label>
-							<input type="checkbox" name="smtp_auth" value="1" <?php checked( 1, absint( $settings['smtp_auth'] ) ); ?> />
-							<span><?php esc_html_e( 'Use SMTP authentication', 'simple-mail-logger' ); ?></span>
-						</label>
-					</div>
-
-					<div class="simple-mail-logger-field">
-						<label for="simple-mail-logger-smtp-username"><?php esc_html_e( 'SMTP username', 'simple-mail-logger' ); ?></label>
-						<input id="simple-mail-logger-smtp-username" type="text" name="smtp_username" value="<?php echo esc_attr( $settings['smtp_username'] ); ?>" autocomplete="username" />
-					</div>
-
-					<div class="simple-mail-logger-field">
-						<label for="simple-mail-logger-smtp-password"><?php esc_html_e( 'SMTP password', 'simple-mail-logger' ); ?></label>
-						<input id="simple-mail-logger-smtp-password" type="password" name="smtp_password" value="<?php echo esc_attr( empty( $settings['smtp_password'] ) ? '' : Simple_Mail_Logger_SMTP::PASSWORD_MASK ); ?>" autocomplete="new-password" />
-						<p class="description"><?php esc_html_e( 'The saved password is masked. Type a new password to replace it.', 'simple-mail-logger' ); ?></p>
-					</div>
-
-					<div class="simple-mail-logger-field">
-						<label for="simple-mail-logger-smtp-from-email"><?php esc_html_e( 'From email', 'simple-mail-logger' ); ?></label>
-						<input id="simple-mail-logger-smtp-from-email" type="email" name="smtp_from_email" value="<?php echo esc_attr( $settings['smtp_from_email'] ); ?>" />
-					</div>
-
-					<div class="simple-mail-logger-field">
-						<label for="simple-mail-logger-smtp-from-name"><?php esc_html_e( 'From name', 'simple-mail-logger' ); ?></label>
-						<input id="simple-mail-logger-smtp-from-name" type="text" name="smtp_from_name" value="<?php echo esc_attr( $settings['smtp_from_name'] ); ?>" />
+							<div class="simple-mail-logger-field">
+								<label for="simple-mail-logger-smtp-from-name"><?php esc_html_e( 'From name', 'simple-mail-logger' ); ?></label>
+								<input id="simple-mail-logger-smtp-from-name" type="text" name="smtp_from_name" value="<?php echo esc_attr( $settings['smtp_from_name'] ); ?>" />
+							</div>
+						</div>
 					</div>
 				</div>
-
 			</div>
 
 			<div class="simple-mail-logger-settings-actions">
