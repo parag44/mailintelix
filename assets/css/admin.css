@@ -348,10 +348,19 @@
 }
 
 .simple-mail-logger-settings-grid {
+	align-items: start;
 	display: grid;
-	gap: 0 18px;
+	gap: 20px 18px;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 	max-width: 900px;
+}
+
+.simple-mail-logger-settings-grid .simple-mail-logger-field {
+	margin-bottom: 0;
+}
+
+.simple-mail-logger-field .description {
+	margin: 0;
 }
 
 .simple-mail-logger-settings-form:not(.is-smtp-enabled) .simple-mail-logger-smtp-fields,
