@@ -1,9 +1,9 @@
-.simple-mail-logger-wrap {
+.mailtally-wrap {
 	max-width: none;
 	padding-right: 20px;
 }
 
-.simple-mail-logger-hero {
+.mailtally-hero {
 	align-items: center;
 	background: linear-gradient(135deg, #172033 0%, #0f766e 100%);
 	border-radius: 8px;
@@ -15,11 +15,11 @@
 	padding: 26px;
 }
 
-.simple-mail-logger-hero__content {
+.mailtally-hero__content {
 	min-width: 0;
 }
 
-.simple-mail-logger-hero h1 {
+.mailtally-hero h1 {
 	color: #fff;
 	font-size: 28px;
 	font-weight: 700;
@@ -27,13 +27,13 @@
 	margin: 0 0 6px;
 }
 
-.simple-mail-logger-hero p {
+.mailtally-hero p {
 	color: rgba(255, 255, 255, 0.82);
 	font-size: 14px;
 	margin: 0;
 }
 
-.simple-mail-logger-logo {
+.mailtally-logo {
 	background: rgba(255, 255, 255, 0.14);
 	border: 1px solid rgba(255, 255, 255, 0.24);
 	border-radius: 8px;
@@ -44,7 +44,7 @@
 	width: 64px;
 }
 
-.simple-mail-logger-logo__icon {
+.mailtally-logo__icon {
 	color: #fff;
 	font-size: 34px;
 	height: 34px;
@@ -52,7 +52,7 @@
 	width: 34px;
 }
 
-.simple-mail-logger-card {
+.mailtally-card {
 	background: #fff;
 	border: 1px solid #dcdcde;
 	border-radius: 8px;
@@ -61,11 +61,11 @@
 	padding: 20px;
 }
 
-.simple-mail-logger-notices {
+.mailtally-notices {
 	margin: 0 0 18px;
 }
 
-.simple-mail-logger-notice {
+.mailtally-notice {
 	background: #fff;
 	border: 1px solid #c3e6cb;
 	border-left: 4px solid #22c55e;
@@ -77,12 +77,12 @@
 	padding: 10px 12px;
 }
 
-.simple-mail-logger-notice p {
+.mailtally-notice p {
 	font-size: 14px;
 	margin: 0;
 }
 
-.simple-mail-logger-filter-bar {
+.mailtally-filter-bar {
 	align-items: end;
 	display: flex;
 	flex-wrap: wrap;
@@ -92,42 +92,42 @@
 	width: 100%;
 }
 
-.simple-mail-logger-filter-group {
+.mailtally-filter-group {
 	align-items: end;
 	display: flex;
 	flex-wrap: wrap;
 	gap: 14px 18px;
 }
 
-.simple-mail-logger-filters .subsubsub {
+.mailtally-filters .subsubsub {
 	float: none;
 	margin: 0;
 	padding: 0 0 7px;
 }
 
-.simple-mail-logger-filter-row {
+.mailtally-filter-row {
 	align-items: end;
 	display: flex;
 	flex-wrap: wrap;
 	gap: 12px;
 }
 
-.simple-mail-logger-filter-row label {
+.mailtally-filter-row label {
 	display: grid;
 	gap: 5px;
 }
 
-.simple-mail-logger-search-group .search-box {
+.mailtally-search-group .search-box {
 	display: flex;
 	gap: 8px;
 	margin: 0;
 }
 
-.simple-mail-logger-search-group input[type="search"] {
+.mailtally-search-group input[type="search"] {
 	min-width: 260px;
 }
 
-.simple-mail-logger-badge {
+.mailtally-badge {
 	border-radius: 999px;
 	display: inline-flex;
 	font-size: 12px;
@@ -136,63 +136,63 @@
 	padding: 6px 10px;
 }
 
-.simple-mail-logger-badge--sent {
+.mailtally-badge--sent {
 	background: #dcfce7;
 	color: #166534;
 }
 
-.simple-mail-logger-badge--failed {
+.mailtally-badge--failed {
 	background: #fee2e2;
 	color: #991b1b;
 }
 
-.simple-mail-logger-badge--unknown {
+.mailtally-badge--unknown {
 	background: #f1f5f9;
 	color: #475569;
 }
 
-.simple-mail-logger-actions {
+.mailtally-actions {
 	display: flex;
 	flex-wrap: nowrap;
 	gap: 6px;
 	white-space: nowrap;
 }
 
-.simple-mail-logger-actions .button {
+.mailtally-actions .button {
 	min-height: 30px;
 	padding-left: 10px;
 	padding-right: 10px;
 }
 
-.simple-mail-logger-card .wp-list-table {
+.mailtally-card .wp-list-table {
 	table-layout: fixed;
 }
 
-.simple-mail-logger-card .wp-list-table .column-cb {
+.mailtally-card .wp-list-table .column-cb {
 	width: 42px;
 }
 
-.simple-mail-logger-card .wp-list-table .column-status {
+.mailtally-card .wp-list-table .column-status {
 	width: 110px;
 }
 
-.simple-mail-logger-card .wp-list-table .column-sent_at {
+.mailtally-card .wp-list-table .column-sent_at {
 	width: 190px;
 }
 
-.simple-mail-logger-card .wp-list-table .column-to_email {
+.mailtally-card .wp-list-table .column-to_email {
 	width: 230px;
 }
 
-.simple-mail-logger-card .wp-list-table .column-error_message {
+.mailtally-card .wp-list-table .column-error_message {
 	width: 260px;
 }
 
-.simple-mail-logger-card .wp-list-table .column-actions {
+.mailtally-card .wp-list-table .column-actions {
 	width: 255px;
 }
 
-.simple-mail-logger-modal {
+.mailtally-modal {
 	align-items: center;
 	background: rgba(15, 23, 42, 0.52);
 	display: none;
@@ -203,11 +203,11 @@
 	z-index: 100000;
 }
 
-.simple-mail-logger-modal.is-open {
+.mailtally-modal.is-open {
 	display: flex;
 }
 
-.simple-mail-logger-modal__panel {
+.mailtally-modal__panel {
 	background: #fff;
 	border-radius: 8px;
 	box-shadow: 0 24px 70px rgba(15, 23, 42, 0.34);
@@ -219,7 +219,7 @@
 	width: min(1180px, 100%);
 }
 
-.simple-mail-logger-modal__close {
+.mailtally-modal__close {
 	background: #f6f7f7;
 	border: 1px solid #dcdcde;
 	border-radius: 50%;
@@ -233,11 +233,11 @@
 	width: 36px;
 }
 
-.simple-mail-logger-preview h2 {
+.mailtally-preview h2 {
 	margin-right: 48px;
 }
 
-.simple-mail-logger-preview__meta {
+.mailtally-preview__meta {
 	align-items: center;
 	display: flex;
 	flex-wrap: wrap;
@@ -245,14 +245,14 @@
 	margin: 12px 0 18px;
 }
 
-.simple-mail-logger-preview__grid {
+.mailtally-preview__grid {
 	display: grid;
 	gap: 16px;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.simple-mail-logger-preview pre,
-.simple-mail-logger-tab-panel pre {
+.mailtally-preview pre,
+.mailtally-tab-panel pre {
 	background: #f6f7f7;
 	border: 1px solid #dcdcde;
 	border-radius: 6px;
@@ -262,7 +262,7 @@
 	white-space: pre-wrap;
 }
 
-.simple-mail-logger-empty-meta {
+.mailtally-empty-meta {
 	background: #f6f7f7;
 	border: 1px dashed #c3c4c7;
 	border-radius: 6px;
@@ -270,7 +270,7 @@
 	padding: 14px;
 }
 
-.simple-mail-logger-error-block {
+.mailtally-error-block {
 	background: #fef2f2;
 	border-left: 4px solid #dc2626;
 	border-radius: 6px;
@@ -279,14 +279,14 @@
 	padding: 12px 14px;
 }
 
-.simple-mail-logger-tabs {
+.mailtally-tabs {
 	border-bottom: 1px solid #dcdcde;
 	display: flex;
 	gap: 6px;
 	margin-top: 20px;
 }
 
-.simple-mail-logger-tabs button {
+.mailtally-tabs button {
 	background: transparent;
 	border: 0;
 	border-bottom: 3px solid transparent;
@@ -295,21 +295,21 @@
 	padding: 12px 14px;
 }
 
-.simple-mail-logger-tabs button.is-active {
+.mailtally-tabs button.is-active {
 	border-bottom-color: #0f766e;
 	color: #0f766e;
 }
 
-.simple-mail-logger-tab-panel {
+.mailtally-tab-panel {
 	display: none;
 	padding-top: 16px;
 }
 
-.simple-mail-logger-tab-panel.is-active {
+.mailtally-tab-panel.is-active {
 	display: block;
 }
 
-.simple-mail-logger-email-frame {
+.mailtally-email-frame {
 	border: 1px solid #dcdcde;
 	border-radius: 6px;
 	box-sizing: border-box;
@@ -318,88 +318,88 @@
 	width: 100%;
 }
 
-.simple-mail-logger-tab-panel[data-simple-mail-logger-panel="source"] pre {
+.mailtally-tab-panel[data-mailtally-panel="source"] pre {
 	box-sizing: border-box;
 	height: 58vh;
 	max-height: none;
 	min-height: 420px;
 }
 
-.simple-mail-logger-field {
+.mailtally-field {
 	display: grid;
 	gap: 8px;
 	margin-bottom: 20px;
 	max-width: 520px;
 }
 
-.simple-mail-logger-field > label:first-child {
+.mailtally-field > label:first-child {
 	font-weight: 700;
 }
 
-.simple-mail-logger-tools-grid {
+.mailtally-tools-grid {
 	display: grid;
 	gap: 18px;
 	grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.simple-mail-logger-tools-grid h2 {
+.mailtally-tools-grid h2 {
 	margin-top: 0;
 }
 
-.simple-mail-logger-tools-grid form {
+.mailtally-tools-grid form {
 	margin-top: 18px;
 }
 
-.simple-mail-logger-tool-field {
+.mailtally-tool-field {
 	display: grid;
 	gap: 8px;
 	margin-bottom: 14px;
 }
 
-.simple-mail-logger-tool-field label {
+.mailtally-tool-field label {
 	font-weight: 600;
 }
 
-.simple-mail-logger-tool-field input {
+.mailtally-tool-field input {
 	box-sizing: border-box;
 	max-width: 520px;
 	width: 100%;
 }
 
-.simple-mail-logger-danger-card {
+.mailtally-danger-card {
 	border-color: #fecaca;
 }
 
 @media screen and (max-width: 782px) {
-	.simple-mail-logger-hero,
-	.simple-mail-logger-filter-bar,
-	.simple-mail-logger-filter-group,
-	.simple-mail-logger-filter-row {
+	.mailtally-hero,
+	.mailtally-filter-bar,
+	.mailtally-filter-group,
+	.mailtally-filter-row {
 		align-items: stretch;
 		flex-direction: column;
 	}
 
-	.simple-mail-logger-search-group .search-box {
+	.mailtally-search-group .search-box {
 		align-items: stretch;
 		flex-direction: column;
 	}
 
-	.simple-mail-logger-search-group input[type="search"] {
+	.mailtally-search-group input[type="search"] {
 		min-width: 0;
 		width: 100%;
 	}
 
-	.simple-mail-logger-preview__grid,
-	.simple-mail-logger-tools-grid {
+	.mailtally-preview__grid,
+	.mailtally-tools-grid {
 		grid-template-columns: 1fr;
 	}
 
-	.simple-mail-logger-modal {
+	.mailtally-modal {
 		padding: 12px;
 	}
 
-	.simple-mail-logger-email-frame,
-	.simple-mail-logger-tab-panel[data-simple-mail-logger-panel="source"] pre {
+	.mailtally-email-frame,
+	.mailtally-tab-panel[data-mailtally-panel="source"] pre {
 		min-height: 320px;
 	}
 }

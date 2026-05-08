@@ -2,7 +2,7 @@
 /**
  * Admin controller.
  *
- * @package Simple Mail Logger
+ * @package MailTally
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Registers admin menus, assets, and log actions.
  */
-class Simple_Mail_Logger_Admin {
+class MailTally_Admin {
 	/**
 	 * Register admin hooks.
 	 *
@@ -22,10 +22,10 @@ class Simple_Mail_Logger_Admin {
 		add_action( 'admin_bar_menu', array( __CLASS__, 'register_admin_bar_link' ), 80 );
 		add_action( 'in_admin_header', array( __CLASS__, 'suppress_admin_notices' ), 0 );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
-		add_action( 'admin_post_simple_mail_logger_delete_log', array( __CLASS__, 'handle_delete_log' ) );
-		add_action( 'admin_post_simple_mail_logger_resend_log', array( __CLASS__, 'handle_resend_log' ) );
-		add_action( 'wp_ajax_simple_mail_logger_get_log', array( __CLASS__, 'ajax_get_log' ) );
-		add_action( 'wp_ajax_simple_mail_logger_delete_log', array( __CLASS__, 'ajax_delete_log' ) );
+		add_action( 'admin_post_mailtally_delete_log', array( __CLASS__, 'handle_delete_log' ) );
+		add_action( 'admin_post_mailtally_resend_log', array( __CLASS__, 'handle_resend_log' ) );
+		add_action( 'wp_ajax_mailtally_get_log', array( __CLASS__, 'ajax_get_log' ) );
+		add_action( 'wp_ajax_mailtally_delete_log', array( __CLASS__, 'ajax_delete_log' ) );
 	}
 
 	/**
@@ -34,7 +34,7 @@ class Simple_Mail_Logger_Admin {
 	 * @return void
 	 */
 	public static function handle_bulk_log_action() {
-		if ( ! is_admin() || 'simple-mail-logger' !== simple_mail_logger_get_request_value( 'page' ) ) {
+		if ( ! is_admin() || 'mailtally' !== mailtally_get_request_value( 'page' ) ) {
 			return;
 		}
 
@@ -50,20 +50,20 @@ class Simple_Mail_Logger_Admin {
 		}
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to perform this action.', 'simple-mail-logger' ) );
+			wp_die( esc_html__( 'You do not have permission to perform this action.', 'mailtally' ) );
 		}
 
-		check_admin_referer( 'bulk-simple_mail_logger_logs' );
+		check_admin_referer( 'bulk-mailtally_logs' );
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified by check_admin_referer() above.
 		$ids           = isset( $_POST['log_ids'] ) ? array_map( 'absint', (array) wp_unslash( $_POST['log_ids'] ) ) : array();
-		$deleted_count = Simple_Mail_Logger_Logger::delete_logs( $ids );
+		$deleted_count = MailTally_Logger::delete_logs( $ids );
 
 		wp_safe_redirect(
 			self::logs_url(
 				array(
-					'simple_mail_logger_message'       => 'bulk',
-					'simple_mail_logger_deleted_count' => absint( $deleted_count ),
+					'mailtally_message'       => 'bulk',
+					'mailtally_deleted_count' => absint( $deleted_count ),
 				)
 			)
 		);
@@ -101,23 +101,23 @@ class Simple_Mail_Logger_Admin {
 
 		$wp_admin_bar->add_node(
 			array(
-				'id'    => 'simple-mail-logger-email-logs',
-				'title' => __( 'Simple Mail Logger Logs', 'simple-mail-logger' ),
+				'id'    => 'mailtally-email-logs',
+				'title' => __( 'MailTally Logs', 'mailtally' ),
 				'href'  => self::logs_url(),
 				'meta'  => array(
-					'title' => __( 'View Simple Mail Logger email logs', 'simple-mail-logger' ),
+					'title' => __( 'View MailTally email logs', 'mailtally' ),
 				),
 			)
 		);
 	}
 
 	/**
-	 * Hide third-party admin notices on Simple Mail Logger screens.
+	 * Hide third-party admin notices on MailTally screens.
 	 *
 	 * @return void
 	 */
 	public static function suppress_admin_notices() {
-		if ( ! self::is_simple_mail_logger_screen() ) {
+		if ( ! self::is_mailtally_screen() ) {
 			return;
 		}
 
@@ -129,61 +129,61 @@ class Simple_Mail_Logger_Admin {
 	}
 
 	/**
-	 * Check whether current admin page belongs to Simple Mail Logger.
+	 * Check whether current admin page belongs to MailTally.
 	 *
 	 * @return bool
 	 */
-	private static function is_simple_mail_logger_screen() {
+	private static function is_mailtally_screen() {
 		if ( ! is_admin() ) {
 			return false;
 		}
 
-		$page = simple_mail_logger_get_request_value( 'page' );
+		$page = mailtally_get_request_value( 'page' );
 
-		return 0 === strpos( $page, 'simple-mail-logger' );
+		return 0 === strpos( $page, 'mailtally' );
 	}
 
 	/**
-	 * Register Simple Mail Logger admin menu.
+	 * Register MailTally admin menu.
 	 *
 	 * @return void
 	 */
 	public static function register_menu() {
 		add_menu_page(
-			__( 'Simple Mail Logger', 'simple-mail-logger' ),
-			__( 'Simple Mail Logger', 'simple-mail-logger' ),
+			__( 'MailTally', 'mailtally' ),
+			__( 'MailTally', 'mailtally' ),
 			'manage_options',
-			'simple-mail-logger',
+			'mailtally',
 			array( __CLASS__, 'render_logs_page' ),
 			'dashicons-email',
 			80
 		);
 
 		add_submenu_page(
-			'simple-mail-logger',
-			__( 'Email Logs', 'simple-mail-logger' ),
-			__( 'Email Logs', 'simple-mail-logger' ),
+			'mailtally',
+			__( 'Email Logs', 'mailtally' ),
+			__( 'Email Logs', 'mailtally' ),
 			'manage_options',
-			'simple-mail-logger',
+			'mailtally',
 			array( __CLASS__, 'render_logs_page' )
 		);
 
 		add_submenu_page(
-			'simple-mail-logger',
-			__( 'Settings', 'simple-mail-logger' ),
-			__( 'Settings', 'simple-mail-logger' ),
+			'mailtally',
+			__( 'Settings', 'mailtally' ),
+			__( 'Settings', 'mailtally' ),
 			'manage_options',
-			'simple-mail-logger-settings',
-			array( 'Simple_Mail_Logger_Settings', 'render_page' )
+			'mailtally-settings',
+			array( 'MailTally_Settings', 'render_page' )
 		);
 
 		add_submenu_page(
-			'simple-mail-logger',
-			__( 'Tools', 'simple-mail-logger' ),
-			__( 'Tools', 'simple-mail-logger' ),
+			'mailtally',
+			__( 'Tools', 'mailtally' ),
+			__( 'Tools', 'mailtally' ),
 			'manage_options',
-			'simple-mail-logger-tools',
-			array( 'Simple_Mail_Logger_Tools', 'render_page' )
+			'mailtally-tools',
+			array( 'MailTally_Tools', 'render_page' )
 		);
 	}
 
@@ -194,35 +194,35 @@ class Simple_Mail_Logger_Admin {
 	 * @return void
 	 */
 	public static function enqueue_assets( $hook ) {
-		if ( false === strpos( $hook, 'simple-mail-logger' ) ) {
+		if ( false === strpos( $hook, 'mailtally' ) ) {
 			return;
 		}
 
 		wp_enqueue_style(
-			'simple-mail-logger-admin',
-			SIMPLE_MAIL_LOGGER_PLUGIN_URL . 'assets/css/admin.css',
+			'mailtally-admin',
+			MAILTALLY_PLUGIN_URL . 'assets/css/admin.css',
 			array(),
-			SIMPLE_MAIL_LOGGER_VERSION
+			MAILTALLY_VERSION
 		);
 
 		wp_enqueue_script(
-			'simple-mail-logger-admin',
-			SIMPLE_MAIL_LOGGER_PLUGIN_URL . 'assets/js/admin.js',
+			'mailtally-admin',
+			MAILTALLY_PLUGIN_URL . 'assets/js/admin.js',
 			array( 'jquery' ),
-			SIMPLE_MAIL_LOGGER_VERSION,
+			MAILTALLY_VERSION,
 			true
 		);
 
 		wp_localize_script(
-			'simple-mail-logger-admin',
+			'mailtally-admin',
 			'SimpleMailLoggerAdmin',
 			array(
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'simple_mail_logger_ajax' ),
+				'nonce'   => wp_create_nonce( 'mailtally_ajax' ),
 				'i18n'    => array(
-					'confirmDelete' => __( 'Delete this email log?', 'simple-mail-logger' ),
-					'loading'       => __( 'Loading email preview...', 'simple-mail-logger' ),
-					'error'         => __( 'Could not load this email log.', 'simple-mail-logger' ),
+					'confirmDelete' => __( 'Delete this email log?', 'mailtally' ),
+					'loading'       => __( 'Loading email preview...', 'mailtally' ),
+					'error'         => __( 'Could not load this email log.', 'mailtally' ),
 				),
 			)
 		);
@@ -235,49 +235,49 @@ class Simple_Mail_Logger_Admin {
 	 */
 	public static function render_logs_page() {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'simple-mail-logger' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'mailtally' ) );
 		}
 
 		require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
-		require_once SIMPLE_MAIL_LOGGER_PLUGIN_DIR . 'includes/class-simple-mail-logger-table.php';
+		require_once MAILTALLY_PLUGIN_DIR . 'includes/class-mailtally-table.php';
 
-		$table = new Simple_Mail_Logger_Table();
+		$table = new MailTally_Table();
 		$table->prepare_items();
 
-		self::render_header( __( 'Email Logs', 'simple-mail-logger' ) );
+		self::render_header( __( 'Email Logs', 'mailtally' ) );
 		self::render_notices();
 		?>
-		<div class="simple-mail-logger-card">
-			<form method="get" class="simple-mail-logger-filters">
-				<input type="hidden" name="page" value="simple-mail-logger" />
-				<div class="simple-mail-logger-filter-bar">
-					<div class="simple-mail-logger-filter-group">
+		<div class="mailtally-card">
+			<form method="get" class="mailtally-filters">
+				<input type="hidden" name="page" value="mailtally" />
+				<div class="mailtally-filter-bar">
+					<div class="mailtally-filter-group">
 						<?php $table->views(); ?>
-						<div class="simple-mail-logger-filter-row">
+						<div class="mailtally-filter-row">
 							<label>
-								<span><?php esc_html_e( 'From', 'simple-mail-logger' ); ?></span>
-								<input type="date" name="date_from" value="<?php echo esc_attr( simple_mail_logger_get_request_value( 'date_from' ) ); ?>" />
+								<span><?php esc_html_e( 'From', 'mailtally' ); ?></span>
+								<input type="date" name="date_from" value="<?php echo esc_attr( mailtally_get_request_value( 'date_from' ) ); ?>" />
 							</label>
 							<label>
-								<span><?php esc_html_e( 'To', 'simple-mail-logger' ); ?></span>
-								<input type="date" name="date_to" value="<?php echo esc_attr( simple_mail_logger_get_request_value( 'date_to' ) ); ?>" />
+								<span><?php esc_html_e( 'To', 'mailtally' ); ?></span>
+								<input type="date" name="date_to" value="<?php echo esc_attr( mailtally_get_request_value( 'date_to' ) ); ?>" />
 							</label>
 						</div>
 					</div>
-					<div class="simple-mail-logger-search-group">
-						<?php $table->search_box( __( 'Search logs', 'simple-mail-logger' ), 'simple-mail-logger-search' ); ?>
+					<div class="mailtally-search-group">
+						<?php $table->search_box( __( 'Search logs', 'mailtally' ), 'mailtally-search' ); ?>
 					</div>
 				</div>
 			</form>
 			<form method="post" action="<?php echo esc_url( self::logs_url() ); ?>">
-				<input type="hidden" name="page" value="simple-mail-logger" />
+				<input type="hidden" name="page" value="mailtally" />
 				<?php $table->display(); ?>
 			</form>
 		</div>
-		<div class="simple-mail-logger-modal" id="simple-mail-logger-preview-modal" aria-hidden="true">
-			<div class="simple-mail-logger-modal__panel" role="dialog" aria-modal="true" aria-labelledby="simple-mail-logger-modal-title">
-				<button type="button" class="simple-mail-logger-modal__close" data-simple-mail-logger-close aria-label="<?php esc_attr_e( 'Close preview', 'simple-mail-logger' ); ?>">&times;</button>
-				<div id="simple-mail-logger-modal-content"></div>
+		<div class="mailtally-modal" id="mailtally-preview-modal" aria-hidden="true">
+			<div class="mailtally-modal__panel" role="dialog" aria-modal="true" aria-labelledby="mailtally-modal-title">
+				<button type="button" class="mailtally-modal__close" data-mailtally-close aria-label="<?php esc_attr_e( 'Close preview', 'mailtally' ); ?>">&times;</button>
+				<div id="mailtally-modal-content"></div>
 			</div>
 		</div>
 		<?php
@@ -292,14 +292,14 @@ class Simple_Mail_Logger_Admin {
 	 */
 	public static function render_header( $title ) {
 		?>
-		<div class="wrap simple-mail-logger-wrap">
-			<div class="simple-mail-logger-hero">
-				<div class="simple-mail-logger-logo" aria-hidden="true">
-					<span class="dashicons dashicons-email simple-mail-logger-logo__icon"></span>
+		<div class="wrap mailtally-wrap">
+			<div class="mailtally-hero">
+				<div class="mailtally-logo" aria-hidden="true">
+					<span class="dashicons dashicons-email mailtally-logo__icon"></span>
 				</div>
-				<div class="simple-mail-logger-hero__content">
+				<div class="mailtally-hero__content">
 					<h1><?php echo esc_html( $title ); ?></h1>
-					<p><?php esc_html_e( 'Email logging, debugging, and delivery insights for WordPress.', 'simple-mail-logger' ); ?></p>
+					<p><?php esc_html_e( 'Email logging, debugging, and delivery insights for WordPress.', 'mailtally' ); ?></p>
 				</div>
 			</div>
 		<?php
@@ -320,35 +320,35 @@ class Simple_Mail_Logger_Admin {
 	 * @return void
 	 */
 	public static function render_notices() {
-		$message = simple_mail_logger_get_request_value( 'simple_mail_logger_message' );
+		$message = mailtally_get_request_value( 'mailtally_message' );
 		if ( empty( $message ) ) {
 			return;
 		}
 
 		$messages = array(
-			'deleted'   => __( 'Email log deleted.', 'simple-mail-logger' ),
-			'bulk'      => __( 'Selected email logs deleted.', 'simple-mail-logger' ),
-			'resent'    => __( 'Email resend requested.', 'simple-mail-logger' ),
-			'cleared'   => __( 'All email logs cleared.', 'simple-mail-logger' ),
-			'settings'  => __( 'Settings saved.', 'simple-mail-logger' ),
-			'test_sent' => __( 'Test email sent. Check Email Logs for the result.', 'simple-mail-logger' ),
+			'deleted'   => __( 'Email log deleted.', 'mailtally' ),
+			'bulk'      => __( 'Selected email logs deleted.', 'mailtally' ),
+			'resent'    => __( 'Email resend requested.', 'mailtally' ),
+			'cleared'   => __( 'All email logs cleared.', 'mailtally' ),
+			'settings'  => __( 'Settings saved.', 'mailtally' ),
+			'test_sent' => __( 'Test email sent. Check Email Logs for the result.', 'mailtally' ),
 		);
 
 		if ( isset( $messages[ $message ] ) ) {
 			if ( 'bulk' === $message ) {
-				$count = absint( simple_mail_logger_get_request_value( 'simple_mail_logger_deleted_count' ) );
+				$count = absint( mailtally_get_request_value( 'mailtally_deleted_count' ) );
 				if ( $count > 0 ) {
 					$messages[ $message ] = sprintf(
 						/* translators: %d: number of deleted email logs. */
-						_n( '%d email log deleted.', '%d email logs deleted.', $count, 'simple-mail-logger' ),
+						_n( '%d email log deleted.', '%d email logs deleted.', $count, 'mailtally' ),
 						$count
 					);
 				}
 			}
 
-			echo '<div class="simple-mail-logger-notices">';
+			echo '<div class="mailtally-notices">';
 			printf(
-				'<div class="simple-mail-logger-notice simple-mail-logger-notice--success" role="status"><p>%s</p></div>',
+				'<div class="mailtally-notice mailtally-notice--success" role="status"><p>%s</p></div>',
 				esc_html( $messages[ $message ] )
 			);
 			echo '</div>';
@@ -361,13 +361,13 @@ class Simple_Mail_Logger_Admin {
 	 * @return void
 	 */
 	public static function handle_delete_log() {
-		self::verify_action_request( 'simple_mail_logger_delete_log' );
+		self::verify_action_request( 'mailtally_delete_log' );
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce is verified by verify_action_request() above.
 		$log_id = isset( $_GET['log_id'] ) ? absint( wp_unslash( $_GET['log_id'] ) ) : 0;
-		Simple_Mail_Logger_Logger::delete_log( $log_id );
+		MailTally_Logger::delete_log( $log_id );
 
-		wp_safe_redirect( self::logs_url( array( 'simple_mail_logger_message' => 'deleted' ) ) );
+		wp_safe_redirect( self::logs_url( array( 'mailtally_message' => 'deleted' ) ) );
 		exit;
 	}
 
@@ -377,13 +377,13 @@ class Simple_Mail_Logger_Admin {
 	 * @return void
 	 */
 	public static function handle_resend_log() {
-		self::verify_action_request( 'simple_mail_logger_resend_log' );
+		self::verify_action_request( 'mailtally_resend_log' );
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce is verified by verify_action_request() above.
 		$log_id = isset( $_GET['log_id'] ) ? absint( wp_unslash( $_GET['log_id'] ) ) : 0;
-		Simple_Mail_Logger_Logger::resend( $log_id );
+		MailTally_Logger::resend( $log_id );
 
-		wp_safe_redirect( self::logs_url( array( 'simple_mail_logger_message' => 'resent' ) ) );
+		wp_safe_redirect( self::logs_url( array( 'mailtally_message' => 'resent' ) ) );
 		exit;
 	}
 
@@ -397,10 +397,10 @@ class Simple_Mail_Logger_Admin {
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- AJAX nonce is verified by verify_ajax_request() above.
 		$log_id = isset( $_POST['log_id'] ) ? absint( wp_unslash( $_POST['log_id'] ) ) : 0;
-		$log    = Simple_Mail_Logger_Logger::get_log( $log_id );
+		$log    = MailTally_Logger::get_log( $log_id );
 
 		if ( ! $log ) {
-			wp_send_json_error( array( 'message' => __( 'Email log not found.', 'simple-mail-logger' ) ), 404 );
+			wp_send_json_error( array( 'message' => __( 'Email log not found.', 'mailtally' ) ), 404 );
 		}
 
 		wp_send_json_success(
@@ -420,7 +420,7 @@ class Simple_Mail_Logger_Admin {
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- AJAX nonce is verified by verify_ajax_request() above.
 		$log_id = isset( $_POST['log_id'] ) ? absint( wp_unslash( $_POST['log_id'] ) ) : 0;
-		Simple_Mail_Logger_Logger::delete_log( $log_id );
+		MailTally_Logger::delete_log( $log_id );
 
 		wp_send_json_success();
 	}
@@ -434,34 +434,34 @@ class Simple_Mail_Logger_Admin {
 	private static function render_preview_html( $log ) {
 		ob_start();
 		?>
-		<div class="simple-mail-logger-preview">
-			<h2 id="simple-mail-logger-modal-title"><?php echo esc_html( $log->subject ? $log->subject : __( '(No subject)', 'simple-mail-logger' ) ); ?></h2>
-			<div class="simple-mail-logger-preview__meta">
-				<span><?php echo wp_kses_post( simple_mail_logger_status_badge( $log->status ) ); ?></span>
-				<span><strong><?php esc_html_e( 'Sent at:', 'simple-mail-logger' ); ?></strong> <?php echo esc_html( mysql2date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $log->sent_at ) ); ?></span>
-				<span><strong><?php esc_html_e( 'To:', 'simple-mail-logger' ); ?></strong> <?php echo esc_html( $log->to_email ); ?></span>
+		<div class="mailtally-preview">
+			<h2 id="mailtally-modal-title"><?php echo esc_html( $log->subject ? $log->subject : __( '(No subject)', 'mailtally' ) ); ?></h2>
+			<div class="mailtally-preview__meta">
+				<span><?php echo wp_kses_post( mailtally_status_badge( $log->status ) ); ?></span>
+				<span><strong><?php esc_html_e( 'Sent at:', 'mailtally' ); ?></strong> <?php echo esc_html( mysql2date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $log->sent_at ) ); ?></span>
+				<span><strong><?php esc_html_e( 'To:', 'mailtally' ); ?></strong> <?php echo esc_html( $log->to_email ); ?></span>
 			</div>
 			<?php if ( ! empty( $log->error_message ) ) : ?>
-				<div class="simple-mail-logger-error-block"><?php echo esc_html( $log->error_message ); ?></div>
+				<div class="mailtally-error-block"><?php echo esc_html( $log->error_message ); ?></div>
 			<?php endif; ?>
-			<div class="simple-mail-logger-preview__grid">
+			<div class="mailtally-preview__grid">
 				<div>
-					<h3><?php esc_html_e( 'Headers', 'simple-mail-logger' ); ?></h3>
-					<?php echo wp_kses_post( self::render_meta_value( $log->headers, __( 'No headers logged for this email.', 'simple-mail-logger' ) ) ); ?>
+					<h3><?php esc_html_e( 'Headers', 'mailtally' ); ?></h3>
+					<?php echo wp_kses_post( self::render_meta_value( $log->headers, __( 'No headers logged for this email.', 'mailtally' ) ) ); ?>
 				</div>
 				<div>
-					<h3><?php esc_html_e( 'Attachments', 'simple-mail-logger' ); ?></h3>
-					<?php echo wp_kses_post( self::render_meta_value( $log->attachments, __( 'No attachments for this email.', 'simple-mail-logger' ) ) ); ?>
+					<h3><?php esc_html_e( 'Attachments', 'mailtally' ); ?></h3>
+					<?php echo wp_kses_post( self::render_meta_value( $log->attachments, __( 'No attachments for this email.', 'mailtally' ) ) ); ?>
 				</div>
 			</div>
-			<div class="simple-mail-logger-tabs">
-				<button type="button" class="is-active" data-simple-mail-logger-tab="html"><?php esc_html_e( 'HTML view', 'simple-mail-logger' ); ?></button>
-				<button type="button" data-simple-mail-logger-tab="source"><?php esc_html_e( 'Text/source view', 'simple-mail-logger' ); ?></button>
+			<div class="mailtally-tabs">
+				<button type="button" class="is-active" data-mailtally-tab="html"><?php esc_html_e( 'HTML view', 'mailtally' ); ?></button>
+				<button type="button" data-mailtally-tab="source"><?php esc_html_e( 'Text/source view', 'mailtally' ); ?></button>
 			</div>
-			<div class="simple-mail-logger-tab-panel is-active" data-simple-mail-logger-panel="html">
-				<iframe class="simple-mail-logger-email-frame" title="<?php esc_attr_e( 'Email HTML preview', 'simple-mail-logger' ); ?>" sandbox srcdoc="<?php echo esc_attr( $log->message ); ?>"></iframe>
+			<div class="mailtally-tab-panel is-active" data-mailtally-panel="html">
+				<iframe class="mailtally-email-frame" title="<?php esc_attr_e( 'Email HTML preview', 'mailtally' ); ?>" sandbox srcdoc="<?php echo esc_attr( $log->message ); ?>"></iframe>
 			</div>
-			<div class="simple-mail-logger-tab-panel" data-simple-mail-logger-panel="source">
+			<div class="mailtally-tab-panel" data-mailtally-panel="source">
 				<pre><?php echo esc_html( $log->message ); ?></pre>
 			</div>
 		</div>
@@ -481,7 +481,7 @@ class Simple_Mail_Logger_Admin {
 
 		if ( '' === $trimmed || '[]' === $trimmed || '{}' === $trimmed ) {
 			return sprintf(
-				'<div class="simple-mail-logger-empty-meta">%s</div>',
+				'<div class="mailtally-empty-meta">%s</div>',
 				esc_html( $empty_message )
 			);
 		}
@@ -500,7 +500,7 @@ class Simple_Mail_Logger_Admin {
 	 */
 	private static function verify_action_request( $action ) {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to perform this action.', 'simple-mail-logger' ) );
+			wp_die( esc_html__( 'You do not have permission to perform this action.', 'mailtally' ) );
 		}
 
 		check_admin_referer( $action );
@@ -513,10 +513,10 @@ class Simple_Mail_Logger_Admin {
 	 */
 	private static function verify_ajax_request() {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'simple-mail-logger' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'mailtally' ) ), 403 );
 		}
 
-		check_ajax_referer( 'simple_mail_logger_ajax', 'nonce' );
+		check_ajax_referer( 'mailtally_ajax', 'nonce' );
 	}
 
 	/**
@@ -526,7 +526,7 @@ class Simple_Mail_Logger_Admin {
 	 * @return string
 	 */
 	public static function logs_url( $args = array() ) {
-		return add_query_arg( $args, admin_url( 'admin.php?page=simple-mail-logger' ) );
+		return add_query_arg( $args, admin_url( 'admin.php?page=mailtally' ) );
 	}
 }
 
@@ -536,7 +536,7 @@ class Simple_Mail_Logger_Admin {
  * @param string $key Request key.
  * @return string
  */
-function simple_mail_logger_get_request_value( $key ) {
+function mailtally_get_request_value( $key ) {
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only request helper for admin filters and screen detection.
 	if ( ! isset( $_REQUEST[ $key ] ) ) {
 		return '';
@@ -554,18 +554,18 @@ function simple_mail_logger_get_request_value( $key ) {
  * @param string $status Log status.
  * @return string
  */
-function simple_mail_logger_status_badge( $status ) {
+function mailtally_status_badge( $status ) {
 	$status = sanitize_key( $status );
-	$label  = __( 'Unknown', 'simple-mail-logger' );
+	$label  = __( 'Unknown', 'mailtally' );
 
 	if ( 'sent' === $status ) {
-		$label = __( 'Sent', 'simple-mail-logger' );
+		$label = __( 'Sent', 'mailtally' );
 	} elseif ( 'failed' === $status ) {
-		$label = __( 'Failed', 'simple-mail-logger' );
+		$label = __( 'Failed', 'mailtally' );
 	}
 
 	return sprintf(
-		'<span class="simple-mail-logger-badge simple-mail-logger-badge--%1$s">%2$s</span>',
+		'<span class="mailtally-badge mailtally-badge--%1$s">%2$s</span>',
 		esc_attr( $status ),
 		esc_html( $label )
 	);
