@@ -332,7 +332,7 @@
 
 .simple-mail-logger-field {
 	display: grid;
-	gap: 8px;
+	gap: 7px;
 	margin-bottom: 20px;
 	max-width: 520px;
 }
@@ -344,22 +344,47 @@
 .simple-mail-logger-divider {
 	border: 0;
 	border-top: 1px solid #dcdcde;
-	margin: 24px 0;
+	margin: 26px 0;
 }
 
 .simple-mail-logger-settings-grid {
 	align-items: start;
 	display: grid;
-	gap: 20px 18px;
+	gap: 22px 22px;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
-	max-width: 900px;
+	margin-top: 22px;
+	max-width: 1120px;
 }
 
 .simple-mail-logger-settings-grid .simple-mail-logger-field {
 	margin-bottom: 0;
+	max-width: none;
+}
+
+.simple-mail-logger-settings-grid input[type="email"],
+.simple-mail-logger-settings-grid input[type="number"],
+.simple-mail-logger-settings-grid input[type="password"],
+.simple-mail-logger-settings-grid input[type="text"],
+.simple-mail-logger-settings-grid select {
+	max-width: none;
+	width: 100%;
+}
+
+.simple-mail-logger-field--checkbox-control {
+	align-self: end;
+	min-height: 36px;
+	padding-bottom: 7px;
+}
+
+.simple-mail-logger-field--checkbox-control label {
+	align-items: center;
+	display: inline-flex;
+	gap: 8px;
 }
 
 .simple-mail-logger-field .description {
+	color: #646970;
+	line-height: 1.45;
 	margin: 0;
 }
 
@@ -369,11 +394,16 @@
 	display: none !important;
 }
 
+.simple-mail-logger-settings-form:not(.is-smtp-enabled) .simple-mail-logger-smtp-action,
+.simple-mail-logger-settings-form:has(#simple-mail-logger-smtp-enabled:not(:checked)) .simple-mail-logger-smtp-action {
+	display: none !important;
+}
+
 .simple-mail-logger-settings-actions {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 8px;
-	margin-top: 8px;
+	gap: 10px;
+	margin-top: 24px;
 }
 
 .simple-mail-logger-tools-grid {

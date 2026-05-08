@@ -102,7 +102,7 @@ class Simple_Mail_Logger_Settings {
 						</select>
 					</div>
 
-					<div class="simple-mail-logger-field">
+					<div class="simple-mail-logger-field simple-mail-logger-field--checkbox-control">
 						<label>
 							<input type="checkbox" name="smtp_auth" value="1" <?php checked( 1, absint( $settings['smtp_auth'] ) ); ?> />
 							<span><?php esc_html_e( 'Use SMTP authentication', 'simple-mail-logger' ); ?></span>
@@ -131,13 +131,11 @@ class Simple_Mail_Logger_Settings {
 					</div>
 				</div>
 
-				<div class="simple-mail-logger-settings-actions">
-					<button type="submit" name="simple_mail_logger_settings_action" value="test_smtp_connection" class="button button-secondary"><?php esc_html_e( 'Check SMTP Connection', 'simple-mail-logger' ); ?></button>
-				</div>
 			</div>
 
 			<div class="simple-mail-logger-settings-actions">
 				<button type="submit" name="simple_mail_logger_settings_action" value="save" class="button button-primary"><?php esc_html_e( 'Save Settings', 'simple-mail-logger' ); ?></button>
+				<button type="submit" name="simple_mail_logger_settings_action" value="test_smtp_connection" class="button button-secondary simple-mail-logger-smtp-action"><?php esc_html_e( 'Check SMTP Connection', 'simple-mail-logger' ); ?></button>
 			</div>
 		</form>
 		<?php
