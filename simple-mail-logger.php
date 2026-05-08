@@ -26,6 +26,7 @@ define( 'SIMPLE_MAIL_LOGGER_SETTINGS_OPTION', 'simple_mail_logger_settings' );
 
 require_once SIMPLE_MAIL_LOGGER_PLUGIN_DIR . 'includes/class-simple-mail-logger-activator.php';
 require_once SIMPLE_MAIL_LOGGER_PLUGIN_DIR . 'includes/class-simple-mail-logger-logger.php';
+require_once SIMPLE_MAIL_LOGGER_PLUGIN_DIR . 'includes/class-simple-mail-logger-smtp.php';
 require_once SIMPLE_MAIL_LOGGER_PLUGIN_DIR . 'includes/class-simple-mail-logger-admin.php';
 require_once SIMPLE_MAIL_LOGGER_PLUGIN_DIR . 'includes/class-simple-mail-logger-settings.php';
 require_once SIMPLE_MAIL_LOGGER_PLUGIN_DIR . 'includes/class-simple-mail-logger-tools.php';
@@ -39,6 +40,7 @@ register_activation_hook( __FILE__, array( 'Simple_Mail_Logger_Activator', 'acti
  */
 function simple_mail_logger_boot() {
 	Simple_Mail_Logger_Logger::init();
+	Simple_Mail_Logger_SMTP::init();
 
 	if ( is_admin() ) {
 		Simple_Mail_Logger_Admin::init();

@@ -326,13 +326,21 @@ class Simple_Mail_Logger_Admin {
 		}
 
 		$messages = array(
-			'deleted'   => __( 'Email log deleted.', 'simple-mail-logger' ),
-			'bulk'      => __( 'Selected email logs deleted.', 'simple-mail-logger' ),
-			'resent'    => __( 'Email resend requested.', 'simple-mail-logger' ),
-			'cleared'   => __( 'All email logs cleared.', 'simple-mail-logger' ),
-			'settings'  => __( 'Settings saved.', 'simple-mail-logger' ),
-			'test_sent' => __( 'Test email sent. Check Email Logs for the result.', 'simple-mail-logger' ),
+			'deleted'      => __( 'Email log deleted.', 'simple-mail-logger' ),
+			'bulk'         => __( 'Selected email logs deleted.', 'simple-mail-logger' ),
+			'resent'       => __( 'Email resend requested.', 'simple-mail-logger' ),
+			'cleared'      => __( 'All email logs cleared.', 'simple-mail-logger' ),
+			'settings'     => __( 'Settings saved.', 'simple-mail-logger' ),
+			'smtp_success' => __( 'SMTP connection established successfully.', 'simple-mail-logger' ),
+			'test_sent'    => __( 'Test email sent. Check Email Logs for the result.', 'simple-mail-logger' ),
 		);
+
+		if ( 'smtp_failed' === $message ) {
+			$messages[ $message ] = simple_mail_logger_get_request_value( 'simple_mail_logger_notice' );
+			if ( empty( $messages[ $message ] ) ) {
+				$messages[ $message ] = __( 'SMTP connection could not be established.', 'simple-mail-logger' );
+			}
+		}
 
 		if ( isset( $messages[ $message ] ) ) {
 			if ( 'bulk' === $message ) {
@@ -348,7 +356,8 @@ class Simple_Mail_Logger_Admin {
 
 			echo '<div class="simple-mail-logger-notices">';
 			printf(
-				'<div class="simple-mail-logger-notice simple-mail-logger-notice--success" role="status"><p>%s</p></div>',
+				'<div class="simple-mail-logger-notice simple-mail-logger-notice--%1$s" role="status"><p>%2$s</p></div>',
+				'smtp_failed' === $message ? 'error' : 'success',
 				esc_html( $messages[ $message ] )
 			);
 			echo '</div>';

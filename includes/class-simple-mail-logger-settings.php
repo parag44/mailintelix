@@ -69,7 +69,73 @@ class Simple_Mail_Logger_Settings {
 				</label>
 			</div>
 
-			<?php submit_button( __( 'Save Settings', 'simple-mail-logger' ) ); ?>
+			<hr class="simple-mail-logger-divider" />
+
+			<h2><?php esc_html_e( 'SMTP Settings', 'simple-mail-logger' ); ?></h2>
+			<p class="description"><?php esc_html_e( 'When enabled, WordPress emails are sent through your SMTP server. Email logging remains active in both SMTP and default mail modes.', 'simple-mail-logger' ); ?></p>
+
+			<div class="simple-mail-logger-field">
+				<label>
+					<input id="simple-mail-logger-smtp-enabled" type="checkbox" name="smtp_enabled" value="1" <?php checked( 1, absint( $settings['smtp_enabled'] ) ); ?> />
+					<span><?php esc_html_e( 'Enable SMTP sending', 'simple-mail-logger' ); ?></span>
+				</label>
+			</div>
+
+			<div class="simple-mail-logger-smtp-fields" data-simple-mail-logger-smtp-fields <?php echo empty( $settings['smtp_enabled'] ) ? 'hidden' : ''; ?>>
+				<div class="simple-mail-logger-settings-grid">
+					<div class="simple-mail-logger-field">
+						<label for="simple-mail-logger-smtp-host"><?php esc_html_e( 'SMTP host', 'simple-mail-logger' ); ?></label>
+						<input id="simple-mail-logger-smtp-host" type="text" name="smtp_host" value="<?php echo esc_attr( $settings['smtp_host'] ); ?>" placeholder="smtp.example.com" />
+					</div>
+
+					<div class="simple-mail-logger-field">
+						<label for="simple-mail-logger-smtp-port"><?php esc_html_e( 'SMTP port', 'simple-mail-logger' ); ?></label>
+						<input id="simple-mail-logger-smtp-port" type="number" min="1" max="65535" step="1" name="smtp_port" value="<?php echo esc_attr( absint( $settings['smtp_port'] ) ); ?>" />
+					</div>
+
+					<div class="simple-mail-logger-field">
+						<label for="simple-mail-logger-smtp-encryption"><?php esc_html_e( 'Encryption', 'simple-mail-logger' ); ?></label>
+						<select id="simple-mail-logger-smtp-encryption" name="smtp_encryption">
+							<option value="none" <?php selected( 'none', $settings['smtp_encryption'] ); ?>><?php esc_html_e( 'None', 'simple-mail-logger' ); ?></option>
+							<option value="ssl" <?php selected( 'ssl', $settings['smtp_encryption'] ); ?>><?php esc_html_e( 'SSL', 'simple-mail-logger' ); ?></option>
+							<option value="tls" <?php selected( 'tls', $settings['smtp_encryption'] ); ?>><?php esc_html_e( 'TLS', 'simple-mail-logger' ); ?></option>
+						</select>
+					</div>
+
+					<div class="simple-mail-logger-field">
+						<label>
+							<input type="checkbox" name="smtp_auth" value="1" <?php checked( 1, absint( $settings['smtp_auth'] ) ); ?> />
+							<span><?php esc_html_e( 'Use SMTP authentication', 'simple-mail-logger' ); ?></span>
+						</label>
+					</div>
+
+					<div class="simple-mail-logger-field">
+						<label for="simple-mail-logger-smtp-username"><?php esc_html_e( 'SMTP username', 'simple-mail-logger' ); ?></label>
+						<input id="simple-mail-logger-smtp-username" type="text" name="smtp_username" value="<?php echo esc_attr( $settings['smtp_username'] ); ?>" autocomplete="username" />
+					</div>
+
+					<div class="simple-mail-logger-field">
+						<label for="simple-mail-logger-smtp-password"><?php esc_html_e( 'SMTP password', 'simple-mail-logger' ); ?></label>
+						<input id="simple-mail-logger-smtp-password" type="password" name="smtp_password" value="" autocomplete="new-password" />
+						<p class="description"><?php esc_html_e( 'Leave blank to keep the saved password.', 'simple-mail-logger' ); ?></p>
+					</div>
+
+					<div class="simple-mail-logger-field">
+						<label for="simple-mail-logger-smtp-from-email"><?php esc_html_e( 'From email', 'simple-mail-logger' ); ?></label>
+						<input id="simple-mail-logger-smtp-from-email" type="email" name="smtp_from_email" value="<?php echo esc_attr( $settings['smtp_from_email'] ); ?>" />
+					</div>
+
+					<div class="simple-mail-logger-field">
+						<label for="simple-mail-logger-smtp-from-name"><?php esc_html_e( 'From name', 'simple-mail-logger' ); ?></label>
+						<input id="simple-mail-logger-smtp-from-name" type="text" name="smtp_from_name" value="<?php echo esc_attr( $settings['smtp_from_name'] ); ?>" />
+					</div>
+				</div>
+			</div>
+
+			<div class="simple-mail-logger-settings-actions">
+				<button type="submit" name="simple_mail_logger_settings_action" value="save" class="button button-primary"><?php esc_html_e( 'Save Settings', 'simple-mail-logger' ); ?></button>
+				<button type="submit" name="simple_mail_logger_settings_action" value="test_smtp_connection" class="button button-secondary"><?php esc_html_e( 'Check SMTP Connection', 'simple-mail-logger' ); ?></button>
+			</div>
 		</form>
 		<?php
 		Simple_Mail_Logger_Admin::render_footer();
@@ -87,25 +153,58 @@ class Simple_Mail_Logger_Settings {
 
 		check_admin_referer( 'simple_mail_logger_save_settings' );
 
-		$retention_days = isset( $_POST['retention_days'] ) ? absint( wp_unslash( $_POST['retention_days'] ) ) : 0;
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Values are sanitized by settings-specific handlers below.
+		$posted = wp_unslash( $_POST );
+
+		$settings       = simple_mail_logger_get_settings();
+		$retention_days = isset( $posted['retention_days'] ) ? absint( $posted['retention_days'] ) : 0;
 		if ( ! in_array( $retention_days, array( 0, 7, 30, 90 ), true ) ) {
 			$retention_days = 0;
 		}
 
-		$settings = array(
-			'logging_enabled'          => isset( $_POST['logging_enabled'] ) ? 1 : 0,
-			'retention_days'           => $retention_days,
-			'delete_data_on_uninstall' => isset( $_POST['delete_data_on_uninstall'] ) ? 1 : 0,
-			'max_logs'                 => isset( $_POST['max_logs'] ) ? absint( wp_unslash( $_POST['max_logs'] ) ) : 5000,
-		);
+		$settings['logging_enabled']          = isset( $posted['logging_enabled'] ) ? 1 : 0;
+		$settings['retention_days']           = $retention_days;
+		$settings['delete_data_on_uninstall'] = isset( $posted['delete_data_on_uninstall'] ) ? 1 : 0;
+		$settings['max_logs']                 = isset( $posted['max_logs'] ) ? absint( $posted['max_logs'] ) : 5000;
+
+		$settings = Simple_Mail_Logger_SMTP::sanitize_settings( $posted, $settings );
 
 		update_option( SIMPLE_MAIL_LOGGER_SETTINGS_OPTION, $settings );
 		Simple_Mail_Logger_Logger::maybe_apply_retention();
 
+		$settings_action = isset( $posted['simple_mail_logger_settings_action'] ) ? sanitize_key( $posted['simple_mail_logger_settings_action'] ) : 'save';
+		if ( 'test_smtp_connection' === $settings_action ) {
+			$result = Simple_Mail_Logger_SMTP::test_connection();
+			if ( is_wp_error( $result ) ) {
+				wp_safe_redirect(
+					add_query_arg(
+						array(
+							'page'                      => 'simple-mail-logger-settings',
+							'simple_mail_logger_message' => 'smtp_failed',
+							'simple_mail_logger_notice'  => $result->get_error_message(),
+						),
+						admin_url( 'admin.php' )
+					)
+				);
+				exit;
+			}
+
+			wp_safe_redirect(
+				add_query_arg(
+					array(
+						'page'                       => 'simple-mail-logger-settings',
+						'simple_mail_logger_message' => 'smtp_success',
+					),
+					admin_url( 'admin.php' )
+				)
+			);
+			exit;
+		}
+
 		wp_safe_redirect(
 			add_query_arg(
 				array(
-					'page'                => 'simple-mail-logger-settings',
+					'page'                       => 'simple-mail-logger-settings',
 					'simple_mail_logger_message' => 'settings',
 				),
 				admin_url( 'admin.php' )

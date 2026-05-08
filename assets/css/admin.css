@@ -77,6 +77,11 @@
 	padding: 10px 12px;
 }
 
+.simple-mail-logger-notice--error {
+	border-color: #fecaca;
+	border-left-color: #dc2626;
+}
+
 .simple-mail-logger-notice p {
 	font-size: 14px;
 	margin: 0;
@@ -336,6 +341,26 @@
 	font-weight: 700;
 }
 
+.simple-mail-logger-divider {
+	border: 0;
+	border-top: 1px solid #dcdcde;
+	margin: 24px 0;
+}
+
+.simple-mail-logger-settings-grid {
+	display: grid;
+	gap: 0 18px;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	max-width: 900px;
+}
+
+.simple-mail-logger-settings-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 8px;
+}
+
 .simple-mail-logger-tools-grid {
 	display: grid;
 	gap: 18px;
@@ -390,6 +415,7 @@
 	}
 
 	.simple-mail-logger-preview__grid,
+	.simple-mail-logger-settings-grid,
 	.simple-mail-logger-tools-grid {
 		grid-template-columns: 1fr;
 	}

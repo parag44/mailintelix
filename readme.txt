@@ -28,11 +28,13 @@ Features include:
 * Resend individual emails.
 * Bulk delete logs.
 * Send a test HTML email.
+* Send emails through your own SMTP server when enabled.
+* Check whether the configured SMTP connection can be established.
 * Clear all logs.
 * Export logs as CSV.
 * Configure logging, retention, uninstall cleanup, and maximum logs.
 
-This plugin does not configure SMTP settings. It logs and debugs emails sent through the standard WordPress mail flow.
+Email logging works whether SMTP sending is enabled or WordPress is using its default mail flow.
 
 == Installation ==
 
@@ -42,9 +44,9 @@ This plugin does not configure SMTP settings. It logs and debugs emails sent thr
 
 == Frequently Asked Questions ==
 
-= Does this plugin configure SMTP? =
+= Does this plugin support SMTP? =
 
-No. Simple Mail Logger logs and debugs WordPress emails only. It does not add SMTP sending configuration.
+Yes. SMTP sending can be enabled from the Settings screen. When SMTP is disabled, WordPress continues using its default mail flow. In both cases, Simple Mail Logger continues logging outgoing email attempts.
 
 = Does "Sent" mean delivered to the inbox? =
 

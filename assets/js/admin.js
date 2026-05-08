@@ -65,4 +65,8 @@
 		$(this).addClass('is-active');
 		$('[data-simple-mail-logger-panel="' + tab + '"]').addClass('is-active');
 	});
+
+	$(document).on('change', '#simple-mail-logger-smtp-enabled', function () {
+		$('[data-simple-mail-logger-smtp-fields]').prop('hidden', !$(this).is(':checked'));
+	});
 })(jQuery);

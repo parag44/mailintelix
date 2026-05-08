@@ -27,6 +27,15 @@ class Simple_Mail_Logger_Activator {
 					'retention_days'          => 0,
 					'delete_data_on_uninstall' => 0,
 					'max_logs'                => 5000,
+					'smtp_enabled'            => 0,
+					'smtp_host'               => '',
+					'smtp_port'               => 587,
+					'smtp_encryption'         => 'none',
+					'smtp_auth'               => 1,
+					'smtp_username'           => '',
+					'smtp_password'           => '',
+					'smtp_from_email'         => '',
+					'smtp_from_name'          => '',
 				)
 			);
 		}
