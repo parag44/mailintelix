@@ -35,7 +35,7 @@ class Simple_Mail_Logger_Settings {
 		Simple_Mail_Logger_Admin::render_header( __( 'Settings', 'simple-mail-logger' ) );
 		Simple_Mail_Logger_Admin::render_notices();
 		?>
-		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="simple-mail-logger-card simple-mail-logger-settings-form">
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="simple-mail-logger-card simple-mail-logger-settings-form <?php echo empty( $settings['smtp_enabled'] ) ? '' : 'is-smtp-enabled'; ?>">
 			<input type="hidden" name="action" value="simple_mail_logger_save_settings" />
 			<?php wp_nonce_field( 'simple_mail_logger_save_settings' ); ?>
 
@@ -81,7 +81,7 @@ class Simple_Mail_Logger_Settings {
 				</label>
 			</div>
 
-			<div class="simple-mail-logger-smtp-fields" data-simple-mail-logger-smtp-fields <?php echo empty( $settings['smtp_enabled'] ) ? 'hidden' : ''; ?>>
+			<div class="simple-mail-logger-smtp-fields" data-simple-mail-logger-smtp-fields>
 				<div class="simple-mail-logger-settings-grid">
 					<div class="simple-mail-logger-field">
 						<label for="simple-mail-logger-smtp-host"><?php esc_html_e( 'SMTP host', 'simple-mail-logger' ); ?></label>
@@ -116,8 +116,8 @@ class Simple_Mail_Logger_Settings {
 
 					<div class="simple-mail-logger-field">
 						<label for="simple-mail-logger-smtp-password"><?php esc_html_e( 'SMTP password', 'simple-mail-logger' ); ?></label>
-						<input id="simple-mail-logger-smtp-password" type="password" name="smtp_password" value="" autocomplete="new-password" />
-						<p class="description"><?php esc_html_e( 'Leave blank to keep the saved password.', 'simple-mail-logger' ); ?></p>
+						<input id="simple-mail-logger-smtp-password" type="password" name="smtp_password" value="<?php echo esc_attr( empty( $settings['smtp_password'] ) ? '' : Simple_Mail_Logger_SMTP::PASSWORD_MASK ); ?>" autocomplete="new-password" />
+						<p class="description"><?php esc_html_e( 'The saved password is masked. Type a new password to replace it.', 'simple-mail-logger' ); ?></p>
 					</div>
 
 					<div class="simple-mail-logger-field">

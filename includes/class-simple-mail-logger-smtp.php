@@ -11,6 +11,8 @@ defined( 'ABSPATH' ) || exit;
  * Configures PHPMailer to use saved SMTP details when enabled.
  */
 class Simple_Mail_Logger_SMTP {
+	const PASSWORD_MASK = '********';
+
 	/**
 	 * Register mailer hooks.
 	 *
@@ -124,6 +126,10 @@ class Simple_Mail_Logger_SMTP {
 		}
 
 		$password = isset( $input['smtp_password'] ) ? sanitize_text_field( $input['smtp_password'] ) : '';
+		if ( self::PASSWORD_MASK === $password && ! empty( $settings['smtp_password'] ) ) {
+			$password = $settings['smtp_password'];
+		}
+
 		if ( '' === $password && ! empty( $settings['smtp_password'] ) ) {
 			$password = $settings['smtp_password'];
 		}

@@ -54,4 +54,15 @@ assert( 'secret' === $settings['smtp_password'] );
 assert( 'sender@example.com' === $settings['smtp_from_email'] );
 assert( 'Example Site' === $settings['smtp_from_name'] );
 
+$masked = Simple_Mail_Logger_SMTP::sanitize_settings(
+	array(
+		'smtp_password' => Simple_Mail_Logger_SMTP::PASSWORD_MASK,
+	),
+	array(
+		'smtp_password' => 'existing-secret',
+	)
+);
+
+assert( 'existing-secret' === $masked['smtp_password'] );
+
 echo "smtp settings test passed\n";

@@ -354,6 +354,8 @@
 	max-width: 900px;
 }
 
+.simple-mail-logger-settings-form:not(.is-smtp-enabled) .simple-mail-logger-smtp-fields,
+.simple-mail-logger-settings-form:has(#simple-mail-logger-smtp-enabled:not(:checked)) .simple-mail-logger-smtp-fields,
 .simple-mail-logger-smtp-fields[hidden] {
 	display: none !important;
 }

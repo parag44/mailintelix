@@ -67,6 +67,6 @@
 	});
 
 	$(document).on('change', '#simple-mail-logger-smtp-enabled', function () {
-		$('[data-simple-mail-logger-smtp-fields]').prop('hidden', !$(this).is(':checked'));
+		$('.simple-mail-logger-settings-form').toggleClass('is-smtp-enabled', $(this).is(':checked'));
 	});
 })(jQuery);
