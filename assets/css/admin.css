@@ -354,6 +354,10 @@
 	max-width: 900px;
 }
 
+.simple-mail-logger-smtp-fields[hidden] {
+	display: none !important;
+}
+
 .simple-mail-logger-settings-actions {
 	display: flex;
 	flex-wrap: wrap;

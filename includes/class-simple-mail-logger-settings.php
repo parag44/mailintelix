@@ -130,11 +130,14 @@ class Simple_Mail_Logger_Settings {
 						<input id="simple-mail-logger-smtp-from-name" type="text" name="smtp_from_name" value="<?php echo esc_attr( $settings['smtp_from_name'] ); ?>" />
 					</div>
 				</div>
+
+				<div class="simple-mail-logger-settings-actions">
+					<button type="submit" name="simple_mail_logger_settings_action" value="test_smtp_connection" class="button button-secondary"><?php esc_html_e( 'Check SMTP Connection', 'simple-mail-logger' ); ?></button>
+				</div>
 			</div>
 
 			<div class="simple-mail-logger-settings-actions">
 				<button type="submit" name="simple_mail_logger_settings_action" value="save" class="button button-primary"><?php esc_html_e( 'Save Settings', 'simple-mail-logger' ); ?></button>
-				<button type="submit" name="simple_mail_logger_settings_action" value="test_smtp_connection" class="button button-secondary"><?php esc_html_e( 'Check SMTP Connection', 'simple-mail-logger' ); ?></button>
 			</div>
 		</form>
 		<?php
