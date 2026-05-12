@@ -2,22 +2,22 @@
 	'use strict';
 
 	function openModal(content) {
-		$('#mailtally-modal-content').html(content);
-		$('#mailtally-preview-modal').addClass('is-open').attr('aria-hidden', 'false');
+		$('#parag-mail-inspector-modal-content').html(content);
+		$('#parag-mail-inspector-preview-modal').addClass('is-open').attr('aria-hidden', 'false');
 	}
 
 	function closeModal() {
-		$('#mailtally-preview-modal').removeClass('is-open').attr('aria-hidden', 'true');
-		$('#mailtally-modal-content').empty();
+		$('#parag-mail-inspector-preview-modal').removeClass('is-open').attr('aria-hidden', 'true');
+		$('#parag-mail-inspector-modal-content').empty();
 	}
 
-	$(document).on('click', '.mailtally-view-log', function () {
+	$(document).on('click', '.parag-mail-inspector-view-log', function () {
 		var logId = $(this).data('log-id');
 
 		openModal('<p>' + SimpleMailLoggerAdmin.i18n.loading + '</p>');
 
 		$.post(SimpleMailLoggerAdmin.ajaxUrl, {
-			action: 'mailtally_get_log',
+			action: 'parag_mail_inspector_get_log',
 			nonce: SimpleMailLoggerAdmin.nonce,
 			log_id: logId
 		}).done(function (response) {
@@ -31,9 +31,9 @@
 		});
 	});
 
-	$(document).on('click', '[data-mailtally-close]', closeModal);
+	$(document).on('click', '[data-parag-mail-inspector-close]', closeModal);
 
-	$(document).on('click', '#mailtally-preview-modal', function (event) {
+	$(document).on('click', '#parag-mail-inspector-preview-modal', function (event) {
 		if (event.target === this) {
 			closeModal();
 		}
@@ -45,24 +45,24 @@
 		}
 	});
 
-	$(document).on('click', '.mailtally-delete-link', function (event) {
+	$(document).on('click', '.parag-mail-inspector-delete-link', function (event) {
 		if (!window.confirm(SimpleMailLoggerAdmin.i18n.confirmDelete)) {
 			event.preventDefault();
 		}
 	});
 
-	$(document).on('submit', 'form[data-mailtally-confirm]', function (event) {
-		if (!window.confirm($(this).data('mailtally-confirm'))) {
+	$(document).on('submit', 'form[data-parag-mail-inspector-confirm]', function (event) {
+		if (!window.confirm($(this).data('parag-mail-inspector-confirm'))) {
 			event.preventDefault();
 		}
 	});
 
-	$(document).on('click', '[data-mailtally-tab]', function () {
-		var tab = $(this).data('mailtally-tab');
+	$(document).on('click', '[data-parag-mail-inspector-tab]', function () {
+		var tab = $(this).data('parag-mail-inspector-tab');
 
-		$('[data-mailtally-tab]').removeClass('is-active');
-		$('[data-mailtally-panel]').removeClass('is-active');
+		$('[data-parag-mail-inspector-tab]').removeClass('is-active');
+		$('[data-parag-mail-inspector-panel]').removeClass('is-active');
 		$(this).addClass('is-active');
-		$('[data-mailtally-panel="' + tab + '"]').addClass('is-active');
+		$('[data-parag-mail-inspector-panel="' + tab + '"]').addClass('is-active');
 	});
 })(jQuery);

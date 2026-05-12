@@ -1,4 +1,4 @@
-=== MailTally – Email Logger ===
+=== Parag Mail Inspector ===
 Contributors: parag44
 Tags: email log, mail logger, email debug, email testing, wp mail
 Requires at least: 5.9
@@ -8,15 +8,15 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-MailTally helps you log, inspect, and debug outgoing emails from your WordPress site.
+Parag Mail Inspector helps you log, inspect, and debug outgoing emails from your WordPress site.
 
 == Description ==
 
-MailTally helps site administrators log outgoing emails sent through WordPress `wp_mail()`.
+Parag Mail Inspector helps site administrators log outgoing emails sent through WordPress `wp_mail()`.
 
 It is built for email debugging and troubleshooting. You can inspect recipients, subjects, message content, headers, attachments, send status, and error messages from a clean WordPress admin interface.
 
-MailTally uses the WordPress `wp_mail_succeeded` and `wp_mail_failed` hooks. A successful status means WordPress and PHPMailer processed the send request. It does not guarantee inbox delivery.
+Parag Mail Inspector uses the WordPress `wp_mail_succeeded` and `wp_mail_failed` hooks. A successful status means WordPress and PHPMailer processed the send request. It does not guarantee inbox delivery.
 
 Features include:
 
@@ -36,15 +36,15 @@ This plugin does not configure SMTP settings. It logs and debugs emails sent thr
 
 == Installation ==
 
-1. Upload the `mailtally` folder to the `/wp-content/plugins/` directory.
-2. Activate `MailTally – Email Logger` through the Plugins screen in WordPress.
-3. Open `MailTally` in the WordPress admin menu.
+1. Upload the `parag-mail-inspector` folder to the `/wp-content/plugins/` directory.
+2. Activate `Parag Mail Inspector` through the Plugins screen in WordPress.
+3. Open `Parag Mail Inspector` in the WordPress admin menu.
 
 == Frequently Asked Questions ==
 
 = Does this plugin configure SMTP? =
 
-No. MailTally logs and debugs WordPress emails only. It does not add SMTP sending configuration.
+No. Parag Mail Inspector logs and debugs WordPress emails only. It does not add SMTP sending configuration.
 
 = Does "Sent" mean delivered to the inbox? =
 

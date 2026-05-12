@@ -2,7 +2,7 @@
 /**
  * Activation tasks.
  *
- * @package MailTally
+ * @package Parag Mail Inspector
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Creates database schema and default settings.
  */
-class MailTally_Activator {
+class Parag_Mail_Inspector_Activator {
 	/**
 	 * Run plugin activation tasks.
 	 *
@@ -19,9 +19,9 @@ class MailTally_Activator {
 	public static function activate() {
 		self::create_table();
 
-		if ( false === get_option( MAILTALLY_SETTINGS_OPTION, false ) ) {
+		if ( false === get_option( PARAG_MAIL_INSPECTOR_SETTINGS_OPTION, false ) ) {
 			add_option(
-				MAILTALLY_SETTINGS_OPTION,
+				PARAG_MAIL_INSPECTOR_SETTINGS_OPTION,
 				array(
 					'logging_enabled'         => 1,
 					'retention_days'          => 0,
@@ -40,7 +40,7 @@ class MailTally_Activator {
 	public static function create_table() {
 		global $wpdb;
 
-		$table_name      = mailtally_get_logs_table();
+		$table_name      = parag_mail_inspector_get_logs_table();
 		$charset_collate = $wpdb->get_charset_collate();
 
 		$sql = "CREATE TABLE {$table_name} (

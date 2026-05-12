@@ -2,7 +2,7 @@
 /**
  * Tools screen.
  *
- * @package MailTally
+ * @package Parag Mail Inspector
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -10,16 +10,16 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Handles operational tools.
  */
-class MailTally_Tools {
+class Parag_Mail_Inspector_Tools {
 	/**
 	 * Register tool actions.
 	 *
 	 * @return void
 	 */
 	public static function init() {
-		add_action( 'admin_post_mailtally_send_test_email', array( __CLASS__, 'send_test_email' ) );
-		add_action( 'admin_post_mailtally_clear_logs', array( __CLASS__, 'clear_logs' ) );
-		add_action( 'admin_post_mailtally_export_csv', array( __CLASS__, 'export_csv' ) );
+		add_action( 'admin_post_parag_mail_inspector_send_test_email', array( __CLASS__, 'send_test_email' ) );
+		add_action( 'admin_post_parag_mail_inspector_clear_logs', array( __CLASS__, 'clear_logs' ) );
+		add_action( 'admin_post_parag_mail_inspector_export_csv', array( __CLASS__, 'export_csv' ) );
 	}
 
 	/**
@@ -29,49 +29,49 @@ class MailTally_Tools {
 	 */
 	public static function render_page() {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'mailtally' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'parag-mail-inspector' ) );
 		}
 
-		MailTally_Admin::render_header( __( 'Tools', 'mailtally' ) );
-		MailTally_Admin::render_notices();
+		Parag_Mail_Inspector_Admin::render_header( __( 'Tools', 'parag-mail-inspector' ) );
+		Parag_Mail_Inspector_Admin::render_notices();
 		?>
-		<div class="mailtally-tools-grid">
-			<div class="mailtally-card">
-				<h2><?php esc_html_e( 'Send test email', 'mailtally' ); ?></h2>
-				<p><?php esc_html_e( 'Send a simple WordPress test email and inspect the result in Email Logs.', 'mailtally' ); ?></p>
+		<div class="parag-mail-inspector-tools-grid">
+			<div class="parag-mail-inspector-card">
+				<h2><?php esc_html_e( 'Send test email', 'parag-mail-inspector' ); ?></h2>
+				<p><?php esc_html_e( 'Send a simple WordPress test email and inspect the result in Email Logs.', 'parag-mail-inspector' ); ?></p>
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-					<input type="hidden" name="action" value="mailtally_send_test_email" />
-					<?php wp_nonce_field( 'mailtally_send_test_email' ); ?>
-					<div class="mailtally-tool-field">
-						<label for="mailtally-test-recipient"><?php esc_html_e( 'Recipient', 'mailtally' ); ?></label>
-						<input id="mailtally-test-recipient" type="email" name="recipient" value="<?php echo esc_attr( get_option( 'admin_email' ) ); ?>" required />
+					<input type="hidden" name="action" value="parag_mail_inspector_send_test_email" />
+					<?php wp_nonce_field( 'parag_mail_inspector_send_test_email' ); ?>
+					<div class="parag-mail-inspector-tool-field">
+						<label for="parag-mail-inspector-test-recipient"><?php esc_html_e( 'Recipient', 'parag-mail-inspector' ); ?></label>
+						<input id="parag-mail-inspector-test-recipient" type="email" name="recipient" value="<?php echo esc_attr( get_option( 'admin_email' ) ); ?>" required />
 					</div>
-					<?php submit_button( __( 'Send Test Email', 'mailtally' ), 'primary', 'submit', false ); ?>
+					<?php submit_button( __( 'Send Test Email', 'parag-mail-inspector' ), 'primary', 'submit', false ); ?>
 				</form>
 			</div>
 
-			<div class="mailtally-card">
-				<h2><?php esc_html_e( 'Export logs', 'mailtally' ); ?></h2>
-				<p><?php esc_html_e( 'Download all email logs as a CSV file for offline review.', 'mailtally' ); ?></p>
+			<div class="parag-mail-inspector-card">
+				<h2><?php esc_html_e( 'Export logs', 'parag-mail-inspector' ); ?></h2>
+				<p><?php esc_html_e( 'Download all email logs as a CSV file for offline review.', 'parag-mail-inspector' ); ?></p>
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-					<input type="hidden" name="action" value="mailtally_export_csv" />
-					<?php wp_nonce_field( 'mailtally_export_csv' ); ?>
-					<?php submit_button( __( 'Export CSV', 'mailtally' ), 'secondary', 'submit', false ); ?>
+					<input type="hidden" name="action" value="parag_mail_inspector_export_csv" />
+					<?php wp_nonce_field( 'parag_mail_inspector_export_csv' ); ?>
+					<?php submit_button( __( 'Export CSV', 'parag-mail-inspector' ), 'secondary', 'submit', false ); ?>
 				</form>
 			</div>
 
-			<div class="mailtally-card mailtally-danger-card">
-				<h2><?php esc_html_e( 'Clear all logs', 'mailtally' ); ?></h2>
-				<p><?php esc_html_e( 'Remove every stored email log from the database.', 'mailtally' ); ?></p>
-				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" data-mailtally-confirm="<?php esc_attr_e( 'Clear all MailTally logs?', 'mailtally' ); ?>">
-					<input type="hidden" name="action" value="mailtally_clear_logs" />
-					<?php wp_nonce_field( 'mailtally_clear_logs' ); ?>
-					<?php submit_button( __( 'Clear Logs', 'mailtally' ), 'delete', 'submit', false ); ?>
+			<div class="parag-mail-inspector-card parag-mail-inspector-danger-card">
+				<h2><?php esc_html_e( 'Clear all logs', 'parag-mail-inspector' ); ?></h2>
+				<p><?php esc_html_e( 'Remove every stored email log from the database.', 'parag-mail-inspector' ); ?></p>
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" data-parag-mail-inspector-confirm="<?php esc_attr_e( 'Clear all Parag Mail Inspector logs?', 'parag-mail-inspector' ); ?>">
+					<input type="hidden" name="action" value="parag_mail_inspector_clear_logs" />
+					<?php wp_nonce_field( 'parag_mail_inspector_clear_logs' ); ?>
+					<?php submit_button( __( 'Clear Logs', 'parag-mail-inspector' ), 'delete', 'submit', false ); ?>
 				</form>
 			</div>
 		</div>
 		<?php
-		MailTally_Admin::render_footer();
+		Parag_Mail_Inspector_Admin::render_footer();
 	}
 
 	/**
@@ -80,7 +80,7 @@ class MailTally_Tools {
 	 * @return void
 	 */
 	public static function send_test_email() {
-		self::verify_request( 'mailtally_send_test_email' );
+		self::verify_request( 'parag_mail_inspector_send_test_email' );
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified by verify_request() above.
 		$recipient = isset( $_POST['recipient'] ) ? sanitize_email( wp_unslash( $_POST['recipient'] ) ) : get_option( 'admin_email' );
@@ -89,7 +89,7 @@ class MailTally_Tools {
 		}
 
 		$site_name = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
-		$subject   = __( 'MailTally test email', 'mailtally' );
+		$subject   = __( 'Parag Mail Inspector test email', 'parag-mail-inspector' );
 		$message   = self::get_test_email_html( $site_name );
 		$headers   = array( 'Content-Type: text/html; charset=UTF-8' );
 
@@ -100,7 +100,7 @@ class MailTally_Tools {
 			$headers
 		);
 
-		wp_safe_redirect( MailTally_Admin::logs_url( array( 'mailtally_message' => 'test_sent' ) ) );
+		wp_safe_redirect( Parag_Mail_Inspector_Admin::logs_url( array( 'parag_mail_inspector_message' => 'test_sent' ) ) );
 		exit;
 	}
 
@@ -119,7 +119,7 @@ class MailTally_Tools {
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>MailTally test email</title>
+	<title>Parag Mail Inspector test email</title>
 </head>
 <body style="margin:0;padding:0;background:#f3f4f6;font-family:Arial,Helvetica,sans-serif;color:#1f2937;">
 	<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f3f4f6;padding:32px 16px;">
@@ -128,14 +128,14 @@ class MailTally_Tools {
 				<table role="presentation" width="600" cellspacing="0" cellpadding="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
 					<tr>
 						<td style="background:#0f766e;padding:28px 32px;color:#ffffff;">
-							<div style="font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;">MailTally</div>
+							<div style="font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;">Parag Mail Inspector</div>
 							<h1 style="margin:8px 0 0;font-size:26px;line-height:1.3;">Test email delivered to WordPress mail flow</h1>
 						</td>
 					</tr>
 					<tr>
 						<td style="padding:32px;">
 							<p style="margin:0 0 16px;font-size:16px;line-height:1.6;">Hi there,</p>
-							<p style="margin:0 0 18px;font-size:16px;line-height:1.6;">This is a polished HTML test email from <strong>' . $site_name . '</strong>. If you can see this in MailTally, your WordPress email logging and preview flow is working.</p>
+							<p style="margin:0 0 18px;font-size:16px;line-height:1.6;">This is a polished HTML test email from <strong>' . $site_name . '</strong>. If you can see this in Parag Mail Inspector, your WordPress email logging and preview flow is working.</p>
 							<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:22px 0;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;">
 								<tr>
 									<td style="padding:16px;font-size:14px;line-height:1.6;">
@@ -150,7 +150,7 @@ class MailTally_Tools {
 						</td>
 					</tr>
 					<tr>
-						<td style="padding:18px 32px;background:#f9fafb;color:#6b7280;font-size:13px;">Generated by MailTally for email logging diagnostics.</td>
+						<td style="padding:18px 32px;background:#f9fafb;color:#6b7280;font-size:13px;">Generated by Parag Mail Inspector for email logging diagnostics.</td>
 					</tr>
 				</table>
 			</td>
@@ -166,10 +166,10 @@ class MailTally_Tools {
 	 * @return void
 	 */
 	public static function clear_logs() {
-		self::verify_request( 'mailtally_clear_logs' );
-		MailTally_Logger::clear_logs();
+		self::verify_request( 'parag_mail_inspector_clear_logs' );
+		Parag_Mail_Inspector_Logger::clear_logs();
 
-		wp_safe_redirect( MailTally_Admin::logs_url( array( 'mailtally_message' => 'cleared' ) ) );
+		wp_safe_redirect( Parag_Mail_Inspector_Admin::logs_url( array( 'parag_mail_inspector_message' => 'cleared' ) ) );
 		exit;
 	}
 
@@ -181,14 +181,14 @@ class MailTally_Tools {
 	public static function export_csv() {
 		global $wpdb;
 
-		self::verify_request( 'mailtally_export_csv' );
+		self::verify_request( 'parag_mail_inspector_export_csv' );
 
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Exporting plugin-owned custom table; no user input is included.
-		$rows = $wpdb->get_results( 'SELECT * FROM ' . mailtally_get_logs_table() . ' ORDER BY sent_at DESC, id DESC', ARRAY_A );
+		$rows = $wpdb->get_results( 'SELECT * FROM ' . parag_mail_inspector_get_logs_table() . ' ORDER BY sent_at DESC, id DESC', ARRAY_A );
 
 		nocache_headers();
 		header( 'Content-Type: text/csv; charset=utf-8' );
-		header( 'Content-Disposition: attachment; filename=mailtally-logs-' . gmdate( 'Y-m-d-His' ) . '.csv' );
+		header( 'Content-Disposition: attachment; filename=parag-mail-inspector-logs-' . gmdate( 'Y-m-d-His' ) . '.csv' );
 
 		$output = fopen( 'php://output', 'w' );
 		if ( false !== $output ) {
@@ -209,7 +209,7 @@ class MailTally_Tools {
 	 */
 	private static function verify_request( $action ) {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to perform this action.', 'mailtally' ) );
+			wp_die( esc_html__( 'You do not have permission to perform this action.', 'parag-mail-inspector' ) );
 		}
 
 		check_admin_referer( $action );

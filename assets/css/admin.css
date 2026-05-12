@@ -1,9 +1,9 @@
-.mailtally-wrap {
+.parag-mail-inspector-wrap {
 	max-width: none;
 	padding-right: 20px;
 }
 
-.mailtally-hero {
+.parag-mail-inspector-hero {
 	align-items: center;
 	background: linear-gradient(135deg, #172033 0%, #0f766e 100%);
 	border-radius: 8px;
@@ -15,11 +15,11 @@
 	padding: 26px;
 }
 
-.mailtally-hero__content {
+.parag-mail-inspector-hero__content {
 	min-width: 0;
 }
 
-.mailtally-hero h1 {
+.parag-mail-inspector-hero h1 {
 	color: #fff;
 	font-size: 28px;
 	font-weight: 700;
@@ -27,13 +27,13 @@
 	margin: 0 0 6px;
 }
 
-.mailtally-hero p {
+.parag-mail-inspector-hero p {
 	color: rgba(255, 255, 255, 0.82);
 	font-size: 14px;
 	margin: 0;
 }
 
-.mailtally-logo {
+.parag-mail-inspector-logo {
 	background: rgba(255, 255, 255, 0.14);
 	border: 1px solid rgba(255, 255, 255, 0.24);
 	border-radius: 8px;
@@ -44,7 +44,7 @@
 	width: 64px;
 }
 
-.mailtally-logo__icon {
+.parag-mail-inspector-logo__icon {
 	color: #fff;
 	font-size: 34px;
 	height: 34px;
@@ -52,7 +52,7 @@
 	width: 34px;
 }
 
-.mailtally-card {
+.parag-mail-inspector-card {
 	background: #fff;
 	border: 1px solid #dcdcde;
 	border-radius: 8px;
@@ -61,11 +61,11 @@
 	padding: 20px;
 }
 
-.mailtally-notices {
+.parag-mail-inspector-notices {
 	margin: 0 0 18px;
 }
 
-.mailtally-notice {
+.parag-mail-inspector-notice {
 	background: #fff;
 	border: 1px solid #c3e6cb;
 	border-left: 4px solid #22c55e;
@@ -77,12 +77,12 @@
 	padding: 10px 12px;
 }
 
-.mailtally-notice p {
+.parag-mail-inspector-notice p {
 	font-size: 14px;
 	margin: 0;
 }
 
-.mailtally-filter-bar {
+.parag-mail-inspector-filter-bar {
 	align-items: end;
 	display: flex;
 	flex-wrap: wrap;
@@ -92,42 +92,42 @@
 	width: 100%;
 }
 
-.mailtally-filter-group {
+.parag-mail-inspector-filter-group {
 	align-items: end;
 	display: flex;
 	flex-wrap: wrap;
 	gap: 14px 18px;
 }
 
-.mailtally-filters .subsubsub {
+.parag-mail-inspector-filters .subsubsub {
 	float: none;
 	margin: 0;
 	padding: 0 0 7px;
 }
 
-.mailtally-filter-row {
+.parag-mail-inspector-filter-row {
 	align-items: end;
 	display: flex;
 	flex-wrap: wrap;
 	gap: 12px;
 }
 
-.mailtally-filter-row label {
+.parag-mail-inspector-filter-row label {
 	display: grid;
 	gap: 5px;
 }
 
-.mailtally-search-group .search-box {
+.parag-mail-inspector-search-group .search-box {
 	display: flex;
 	gap: 8px;
 	margin: 0;
 }
 
-.mailtally-search-group input[type="search"] {
+.parag-mail-inspector-search-group input[type="search"] {
 	min-width: 260px;
 }
 
-.mailtally-badge {
+.parag-mail-inspector-badge {
 	border-radius: 999px;
 	display: inline-flex;
 	font-size: 12px;
@@ -136,63 +136,63 @@
 	padding: 6px 10px;
 }
 
-.mailtally-badge--sent {
+.parag-mail-inspector-badge--sent {
 	background: #dcfce7;
 	color: #166534;
 }
 
-.mailtally-badge--failed {
+.parag-mail-inspector-badge--failed {
 	background: #fee2e2;
 	color: #991b1b;
 }
 
-.mailtally-badge--unknown {
+.parag-mail-inspector-badge--unknown {
 	background: #f1f5f9;
 	color: #475569;
 }
 
-.mailtally-actions {
+.parag-mail-inspector-actions {
 	display: flex;
 	flex-wrap: nowrap;
 	gap: 6px;
 	white-space: nowrap;
 }
 
-.mailtally-actions .button {
+.parag-mail-inspector-actions .button {
 	min-height: 30px;
 	padding-left: 10px;
 	padding-right: 10px;
 }
 
-.mailtally-card .wp-list-table {
+.parag-mail-inspector-card .wp-list-table {
 	table-layout: fixed;
 }
 
-.mailtally-card .wp-list-table .column-cb {
+.parag-mail-inspector-card .wp-list-table .column-cb {
 	width: 42px;
 }
 
-.mailtally-card .wp-list-table .column-status {
+.parag-mail-inspector-card .wp-list-table .column-status {
 	width: 110px;
 }
 
-.mailtally-card .wp-list-table .column-sent_at {
+.parag-mail-inspector-card .wp-list-table .column-sent_at {
 	width: 190px;
 }
 
-.mailtally-card .wp-list-table .column-to_email {
+.parag-mail-inspector-card .wp-list-table .column-to_email {
 	width: 230px;
 }
 
-.mailtally-card .wp-list-table .column-error_message {
+.parag-mail-inspector-card .wp-list-table .column-error_message {
 	width: 260px;
 }
 
-.mailtally-card .wp-list-table .column-actions {
+.parag-mail-inspector-card .wp-list-table .column-actions {
 	width: 255px;
 }
 
-.mailtally-modal {
+.parag-mail-inspector-modal {
 	align-items: center;
 	background: rgba(15, 23, 42, 0.52);
 	display: none;
@@ -203,11 +203,11 @@
 	z-index: 100000;
 }
 
-.mailtally-modal.is-open {
+.parag-mail-inspector-modal.is-open {
 	display: flex;
 }
 
-.mailtally-modal__panel {
+.parag-mail-inspector-modal__panel {
 	background: #fff;
 	border-radius: 8px;
 	box-shadow: 0 24px 70px rgba(15, 23, 42, 0.34);
@@ -219,7 +219,7 @@
 	width: min(1180px, 100%);
 }
 
-.mailtally-modal__close {
+.parag-mail-inspector-modal__close {
 	background: #f6f7f7;
 	border: 1px solid #dcdcde;
 	border-radius: 50%;
@@ -233,11 +233,11 @@
 	width: 36px;
 }
 
-.mailtally-preview h2 {
+.parag-mail-inspector-preview h2 {
 	margin-right: 48px;
 }
 
-.mailtally-preview__meta {
+.parag-mail-inspector-preview__meta {
 	align-items: center;
 	display: flex;
 	flex-wrap: wrap;
@@ -245,14 +245,14 @@
 	margin: 12px 0 18px;
 }
 
-.mailtally-preview__grid {
+.parag-mail-inspector-preview__grid {
 	display: grid;
 	gap: 16px;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.mailtally-preview pre,
-.mailtally-tab-panel pre {
+.parag-mail-inspector-preview pre,
+.parag-mail-inspector-tab-panel pre {
 	background: #f6f7f7;
 	border: 1px solid #dcdcde;
 	border-radius: 6px;
@@ -262,7 +262,7 @@
 	white-space: pre-wrap;
 }
 
-.mailtally-empty-meta {
+.parag-mail-inspector-empty-meta {
 	background: #f6f7f7;
 	border: 1px dashed #c3c4c7;
 	border-radius: 6px;
@@ -270,7 +270,7 @@
 	padding: 14px;
 }
 
-.mailtally-error-block {
+.parag-mail-inspector-error-block {
 	background: #fef2f2;
 	border-left: 4px solid #dc2626;
 	border-radius: 6px;
@@ -279,14 +279,14 @@
 	padding: 12px 14px;
 }
 
-.mailtally-tabs {
+.parag-mail-inspector-tabs {
 	border-bottom: 1px solid #dcdcde;
 	display: flex;
 	gap: 6px;
 	margin-top: 20px;
 }
 
-.mailtally-tabs button {
+.parag-mail-inspector-tabs button {
 	background: transparent;
 	border: 0;
 	border-bottom: 3px solid transparent;
@@ -295,21 +295,21 @@
 	padding: 12px 14px;
 }
 
-.mailtally-tabs button.is-active {
+.parag-mail-inspector-tabs button.is-active {
 	border-bottom-color: #0f766e;
 	color: #0f766e;
 }
 
-.mailtally-tab-panel {
+.parag-mail-inspector-tab-panel {
 	display: none;
 	padding-top: 16px;
 }
 
-.mailtally-tab-panel.is-active {
+.parag-mail-inspector-tab-panel.is-active {
 	display: block;
 }
 
-.mailtally-email-frame {
+.parag-mail-inspector-email-frame {
 	border: 1px solid #dcdcde;
 	border-radius: 6px;
 	box-sizing: border-box;
@@ -318,88 +318,88 @@
 	width: 100%;
 }
 
-.mailtally-tab-panel[data-mailtally-panel="source"] pre {
+.parag-mail-inspector-tab-panel[data-parag-mail-inspector-panel="source"] pre {
 	box-sizing: border-box;
 	height: 58vh;
 	max-height: none;
 	min-height: 420px;
 }
 
-.mailtally-field {
+.parag-mail-inspector-field {
 	display: grid;
 	gap: 8px;
 	margin-bottom: 20px;
 	max-width: 520px;
 }
 
-.mailtally-field > label:first-child {
+.parag-mail-inspector-field > label:first-child {
 	font-weight: 700;
 }
 
-.mailtally-tools-grid {
+.parag-mail-inspector-tools-grid {
 	display: grid;
 	gap: 18px;
 	grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.mailtally-tools-grid h2 {
+.parag-mail-inspector-tools-grid h2 {
 	margin-top: 0;
 }
 
-.mailtally-tools-grid form {
+.parag-mail-inspector-tools-grid form {
 	margin-top: 18px;
 }
 
-.mailtally-tool-field {
+.parag-mail-inspector-tool-field {
 	display: grid;
 	gap: 8px;
 	margin-bottom: 14px;
 }
 
-.mailtally-tool-field label {
+.parag-mail-inspector-tool-field label {
 	font-weight: 600;
 }
 
-.mailtally-tool-field input {
+.parag-mail-inspector-tool-field input {
 	box-sizing: border-box;
 	max-width: 520px;
 	width: 100%;
 }
 
-.mailtally-danger-card {
+.parag-mail-inspector-danger-card {
 	border-color: #fecaca;
 }
 
 @media screen and (max-width: 782px) {
-	.mailtally-hero,
-	.mailtally-filter-bar,
-	.mailtally-filter-group,
-	.mailtally-filter-row {
+	.parag-mail-inspector-hero,
+	.parag-mail-inspector-filter-bar,
+	.parag-mail-inspector-filter-group,
+	.parag-mail-inspector-filter-row {
 		align-items: stretch;
 		flex-direction: column;
 	}
 
-	.mailtally-search-group .search-box {
+	.parag-mail-inspector-search-group .search-box {
 		align-items: stretch;
 		flex-direction: column;
 	}
 
-	.mailtally-search-group input[type="search"] {
+	.parag-mail-inspector-search-group input[type="search"] {
 		min-width: 0;
 		width: 100%;
 	}
 
-	.mailtally-preview__grid,
-	.mailtally-tools-grid {
+	.parag-mail-inspector-preview__grid,
+	.parag-mail-inspector-tools-grid {
 		grid-template-columns: 1fr;
 	}
 
-	.mailtally-modal {
+	.parag-mail-inspector-modal {
 		padding: 12px;
 	}
 
-	.mailtally-email-frame,
-	.mailtally-tab-panel[data-mailtally-panel="source"] pre {
+	.parag-mail-inspector-email-frame,
+	.parag-mail-inspector-tab-panel[data-parag-mail-inspector-panel="source"] pre {
 		min-height: 320px;
 	}
 }

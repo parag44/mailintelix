@@ -2,7 +2,7 @@
 /**
  * Email logger.
  *
- * @package MailTally
+ * @package Parag Mail Inspector
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Hooks into wp_mail outcomes and persists email logs.
  */
-class MailTally_Logger {
+class Parag_Mail_Inspector_Logger {
 	/**
 	 * Register mail hooks.
 	 *
@@ -83,9 +83,9 @@ class MailTally_Logger {
 		}
 
 		$now        = current_time( 'mysql' );
-		$table_name = mailtally_get_logs_table();
+		$table_name = parag_mail_inspector_get_logs_table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- MailTally stores email logs in its own custom table.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Parag Mail Inspector stores email logs in its own custom table.
 		$inserted = $wpdb->insert(
 			$table_name,
 			array(
@@ -117,7 +117,7 @@ class MailTally_Logger {
 		$log = self::get_log( $log_id );
 
 		if ( ! $log ) {
-			return new WP_Error( 'mailtally_missing_log', __( 'Email log not found.', 'mailtally' ) );
+			return new WP_Error( 'parag_mail_inspector_missing_log', __( 'Email log not found.', 'parag-mail-inspector' ) );
 		}
 
 		$to          = self::decode_value( $log->to_email );
@@ -136,7 +136,7 @@ class MailTally_Logger {
 	public static function get_log( $log_id ) {
 		global $wpdb;
 
-		$table_name = esc_sql( mailtally_get_logs_table() );
+		$table_name = esc_sql( parag_mail_inspector_get_logs_table() );
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Email logs are mutable admin data from a custom table.
 		return $wpdb->get_row(
@@ -159,7 +159,7 @@ class MailTally_Logger {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Deleting custom-table email log data.
 		return $wpdb->delete(
-			mailtally_get_logs_table(),
+			parag_mail_inspector_get_logs_table(),
 			array( 'id' => absint( $log_id ) ),
 			array( '%d' )
 		);
@@ -185,7 +185,7 @@ class MailTally_Logger {
 		return (int) $wpdb->query(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- Table name is plugin-owned and placeholders are generated from sanitized IDs.
-				"DELETE FROM " . mailtally_get_logs_table() . " WHERE id IN ({$placeholders})",
+				"DELETE FROM " . parag_mail_inspector_get_logs_table() . " WHERE id IN ({$placeholders})",
 				$ids
 			)
 		);
@@ -200,7 +200,7 @@ class MailTally_Logger {
 		global $wpdb;
 
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Clearing plugin-owned custom table; no user input is included.
-		return $wpdb->query( 'TRUNCATE TABLE ' . mailtally_get_logs_table() );
+		return $wpdb->query( 'TRUNCATE TABLE ' . parag_mail_inspector_get_logs_table() );
 	}
 
 	/**
@@ -211,8 +211,8 @@ class MailTally_Logger {
 	public static function maybe_apply_retention() {
 		global $wpdb;
 
-		$settings   = mailtally_get_settings();
-		$table_name = esc_sql( mailtally_get_logs_table() );
+		$settings   = parag_mail_inspector_get_settings();
+		$table_name = esc_sql( parag_mail_inspector_get_logs_table() );
 
 		if ( ! empty( $settings['retention_days'] ) ) {
 			$days = absint( $settings['retention_days'] );
@@ -263,7 +263,7 @@ class MailTally_Logger {
 	 * @return bool
 	 */
 	private static function is_logging_enabled() {
-		$settings = mailtally_get_settings();
+		$settings = parag_mail_inspector_get_settings();
 
 		return ! empty( $settings['logging_enabled'] );
 	}
@@ -340,10 +340,10 @@ class MailTally_Logger {
  *
  * @return string
  */
-function mailtally_get_logs_table() {
+function parag_mail_inspector_get_logs_table() {
 	global $wpdb;
 
-	return $wpdb->prefix . MAILTALLY_LOGS_TABLE;
+	return $wpdb->prefix . PARAG_MAIL_INSPECTOR_LOGS_TABLE;
 }
 
 /**
@@ -351,7 +351,7 @@ function mailtally_get_logs_table() {
  *
  * @return array
  */
-function mailtally_get_settings() {
+function parag_mail_inspector_get_settings() {
 	$defaults = array(
 		'logging_enabled'          => 1,
 		'retention_days'           => 0,
@@ -359,7 +359,7 @@ function mailtally_get_settings() {
 		'max_logs'                 => 5000,
 	);
 
-	$settings = get_option( MAILTALLY_SETTINGS_OPTION, array() );
+	$settings = get_option( PARAG_MAIL_INSPECTOR_SETTINGS_OPTION, array() );
 
 	return wp_parse_args( is_array( $settings ) ? $settings : array(), $defaults );
 }
