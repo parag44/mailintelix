@@ -180,12 +180,13 @@ class Parag_Mail_Inspector_Logger {
 		}
 
 		$placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
+		$table_name   = esc_sql( parag_mail_inspector_get_logs_table() );
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Deleting custom-table email log data.
 		return (int) $wpdb->query(
 			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- Table name is plugin-owned and placeholders are generated from sanitized IDs.
-				"DELETE FROM " . parag_mail_inspector_get_logs_table() . " WHERE id IN ({$placeholders})",
+				// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- Table name is escaped and plugin-owned; placeholders are generated from sanitized IDs.
+				"DELETE FROM {$table_name} WHERE id IN ({$placeholders})",
 				$ids
 			)
 		);
@@ -199,8 +200,10 @@ class Parag_Mail_Inspector_Logger {
 	public static function clear_logs() {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Clearing plugin-owned custom table; no user input is included.
-		return $wpdb->query( 'TRUNCATE TABLE ' . parag_mail_inspector_get_logs_table() );
+		$table_name = esc_sql( parag_mail_inspector_get_logs_table() );
+
+		// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Clearing escaped plugin-owned custom table; no user input is included.
+		return $wpdb->query( "TRUNCATE TABLE {$table_name}" );
 	}
 
 	/**

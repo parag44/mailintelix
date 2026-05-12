@@ -183,8 +183,10 @@ class Parag_Mail_Inspector_Tools {
 
 		self::verify_request( 'parag_mail_inspector_export_csv' );
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Exporting plugin-owned custom table; no user input is included.
-		$rows = $wpdb->get_results( 'SELECT * FROM ' . parag_mail_inspector_get_logs_table() . ' ORDER BY sent_at DESC, id DESC', ARRAY_A );
+		$table_name = esc_sql( parag_mail_inspector_get_logs_table() );
+
+		// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Exporting escaped plugin-owned custom table; no user input is included.
+		$rows = $wpdb->get_results( "SELECT * FROM {$table_name} ORDER BY sent_at DESC, id DESC", ARRAY_A );
 
 		nocache_headers();
 		header( 'Content-Type: text/csv; charset=utf-8' );

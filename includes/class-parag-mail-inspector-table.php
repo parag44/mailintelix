@@ -75,15 +75,15 @@ class Parag_Mail_Inspector_Table extends WP_List_Table {
 		$query_params = array_merge( $params, array( $per_page, $offset ) );
 
 		$total_items = empty( $total_params )
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- SQL is assembled from fixed fragments and plugin-owned table name; no user input without placeholders.
+			// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- SQL is assembled from fixed fragments and an escaped plugin-owned table name; no user input without placeholders.
 			? (int) $wpdb->get_var( $total_sql )
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- SQL is assembled from fixed fragments and plugin-owned table name; dynamic values are prepared.
+			// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- SQL is assembled from fixed fragments and an escaped plugin-owned table name; dynamic values are prepared.
 			: (int) $wpdb->get_var( $wpdb->prepare( $total_sql, $total_params ) );
 
 		$this->items = empty( $query_params )
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- SQL is assembled from fixed fragments and plugin-owned table name; pagination values are constants here.
+			// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- SQL is assembled from fixed fragments and an escaped plugin-owned table name; pagination values are constants here.
 			? $wpdb->get_results( $query_sql )
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- SQL is assembled from fixed fragments and plugin-owned table name; dynamic values are prepared.
+			// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- SQL is assembled from fixed fragments and an escaped plugin-owned table name; dynamic values are prepared.
 			: $wpdb->get_results( $wpdb->prepare( $query_sql, $query_params ) );
 
 		$this->_column_headers = array( $this->get_columns(), array(), $this->get_sortable_columns(), 'sent_at' );
