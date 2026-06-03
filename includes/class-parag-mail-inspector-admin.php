@@ -215,7 +215,7 @@ class Parag_Mail_Inspector_Admin {
 
 		wp_localize_script(
 			'parag-mail-inspector-admin',
-			'SimpleMailLoggerAdmin',
+			'ParagMailInspectorAdmin',
 			array(
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'parag_mail_inspector_ajax' ),

@@ -14,20 +14,20 @@
 	$(document).on('click', '.parag-mail-inspector-view-log', function () {
 		var logId = $(this).data('log-id');
 
-		openModal('<p>' + SimpleMailLoggerAdmin.i18n.loading + '</p>');
+		openModal('<p>' + ParagMailInspectorAdmin.i18n.loading + '</p>');
 
-		$.post(SimpleMailLoggerAdmin.ajaxUrl, {
+		$.post(ParagMailInspectorAdmin.ajaxUrl, {
 			action: 'parag_mail_inspector_get_log',
-			nonce: SimpleMailLoggerAdmin.nonce,
+			nonce: ParagMailInspectorAdmin.nonce,
 			log_id: logId
 		}).done(function (response) {
 			if (response && response.success && response.data.html) {
 				openModal(response.data.html);
 			} else {
-				openModal('<p>' + SimpleMailLoggerAdmin.i18n.error + '</p>');
+				openModal('<p>' + ParagMailInspectorAdmin.i18n.error + '</p>');
 			}
 		}).fail(function () {
-			openModal('<p>' + SimpleMailLoggerAdmin.i18n.error + '</p>');
+			openModal('<p>' + ParagMailInspectorAdmin.i18n.error + '</p>');
 		});
 	});
 
@@ -46,7 +46,7 @@
 	});
 
 	$(document).on('click', '.parag-mail-inspector-delete-link', function (event) {
-		if (!window.confirm(SimpleMailLoggerAdmin.i18n.confirmDelete)) {
+		if (!window.confirm(ParagMailInspectorAdmin.i18n.confirmDelete)) {
 			event.preventDefault();
 		}
 	});
