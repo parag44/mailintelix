@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Parag Mail Inspector
+ * Plugin Name:       MailTally – Email Logger
  * Description:       A simple email logging and debugging tool for WordPress. Log outgoing emails, inspect email details, and troubleshoot mail delivery issues.
  * Version:           1.0.0
  * Requires at least: 5.9

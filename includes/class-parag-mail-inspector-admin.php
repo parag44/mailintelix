@@ -102,10 +102,10 @@ class Parag_Mail_Inspector_Admin {
 		$wp_admin_bar->add_node(
 			array(
 				'id'    => 'parag-mail-inspector-email-logs',
-				'title' => __( 'Parag Mail Inspector Logs', 'parag-mail-inspector' ),
+				'title' => __( 'MailTally Logs', 'parag-mail-inspector' ),
 				'href'  => self::logs_url(),
 				'meta'  => array(
-					'title' => __( 'View Parag Mail Inspector email logs', 'parag-mail-inspector' ),
+					'title' => __( 'View MailTally email logs', 'parag-mail-inspector' ),
 				),
 			)
 		);
@@ -150,8 +150,8 @@ class Parag_Mail_Inspector_Admin {
 	 */
 	public static function register_menu() {
 		add_menu_page(
-			__( 'Parag Mail Inspector', 'parag-mail-inspector' ),
-			__( 'Parag Mail Inspector', 'parag-mail-inspector' ),
+			__( 'MailTally – Email Logger', 'parag-mail-inspector' ),
+			__( 'MailTally', 'parag-mail-inspector' ),
 			'manage_options',
 			'parag-mail-inspector',
 			array( __CLASS__, 'render_logs_page' ),
